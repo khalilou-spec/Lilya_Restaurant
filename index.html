@@ -13,11 +13,13 @@
       --midnight: #0b2a57;
       --azure: #1c4f96;
       --sky: #2a78c6;
-      --gold: #f7a531;
-      --amber: #e07b1d;
+      --gold: #f6b24a;
+      --amber: #d9771c;
       --paper: #ffffff;
       --mist: #f4f7fb;
-      --shadow: 0 18px 40px rgba(9, 24, 52, 0.12);
+      --shadow: 0 20px 45px rgba(9, 24, 52, 0.14);
+      --shadow-soft: 0 10px 24px rgba(9, 24, 52, 0.12);
+      --glow: 0 0 0 1px rgba(247, 165, 49, 0.15);
       --radius: 22px;
     }
 
@@ -29,9 +31,10 @@
       margin: 0;
       font-family: "Plus Jakarta Sans", Arial, sans-serif;
       color: var(--ink);
-      font-size: 16px;
-      line-height: 1.5;
-      background: radial-gradient(circle at top left, #eef4ff 0%, #f7f9fc 45%, #ffffff 100%);
+      font-size: 15.5px;
+      line-height: 1.6;
+      letter-spacing: 0.1px;
+      background: radial-gradient(circle at top left, #eef4ff 0%, #f6f4f2 40%, #ffffff 100%);
     }
 
     a {
@@ -76,7 +79,7 @@
       min-height: 100vh;
       margin: 0 auto;
       background: var(--paper);
-      box-shadow: 0 22px 60px rgba(10, 28, 60, 0.18);
+      box-shadow: 0 26px 70px rgba(10, 28, 60, 0.2);
       border-radius: 26px 26px 0 0;
       overflow: hidden;
       transform: translateY(24px);
@@ -93,6 +96,10 @@
       padding: 18px 16px 14px;
       background: linear-gradient(145deg, rgba(11, 42, 87, 0.08), rgba(42, 120, 198, 0.08));
       border-bottom: 1px solid rgba(14, 26, 43, 0.08);
+      position: sticky;
+      top: 0;
+      z-index: 5;
+      backdrop-filter: blur(8px);
     }
 
     .brand-row {
@@ -106,7 +113,7 @@
       height: 56px;
       border-radius: 16px;
       background: #ffffff;
-      box-shadow: 0 8px 20px rgba(14, 26, 43, 0.12);
+      box-shadow: var(--shadow-soft);
       padding: 6px;
     }
 
@@ -114,11 +121,12 @@
       margin: 0;
       font-family: "Playfair Display", serif;
       font-size: 24px;
+      letter-spacing: 0.4px;
     }
 
     .subtitle {
       margin: 4px 0 0;
-      font-size: 14px;
+      font-size: 13.5px;
       color: #3c4f66;
     }
 
@@ -155,6 +163,18 @@
 
     .pill-btn:hover {
       transform: translateY(-2px);
+    }
+
+    .pill-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 8px 18px rgba(224, 123, 29, 0.22);
+    }
+
+    .pill-btn:focus-visible,
+    .tab-btn:focus-visible,
+    .nav-btn:focus-visible {
+      outline: 2px solid rgba(246, 178, 74, 0.75);
+      outline-offset: 2px;
     }
 
     .app-content {
@@ -196,26 +216,132 @@
 
     .hero-body {
       padding: 16px;
-      background: linear-gradient(0deg, rgba(11, 42, 87, 0.95), rgba(11, 42, 87, 0.2));
+      background: linear-gradient(0deg, rgba(8, 24, 52, 0.98), rgba(8, 24, 52, 0.2));
       margin-top: -120px;
       backdrop-filter: blur(6px);
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      background: rgba(247, 165, 49, 0.18);
+      color: #ffd38a;
+      border: 1px solid rgba(247, 165, 49, 0.5);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 700;
+      margin-bottom: 10px;
     }
 
     .hero-body h2 {
       margin: 0 0 8px;
       font-family: "Playfair Display", serif;
-      font-size: 24px;
+      font-size: 25px;
     }
 
     .hero-body p {
       margin: 0 0 12px;
-      font-size: 15px;
+      font-size: 14.5px;
       color: #e2ecff;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 12px;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .hero-stat {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 8px 10px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .hero-stat strong {
+      display: block;
+      font-size: 14px;
+      color: #ffd38a;
+    }
+
+    .hero-body h2,
+    .hero-body p,
+    .hero-actions,
+    .hero-stats,
+    .hero-kicker {
+      animation: floatIn 0.7s ease forwards;
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .hero-body h2 { animation-delay: 0.05s; }
+    .hero-body p { animation-delay: 0.12s; }
+    .hero-actions { animation-delay: 0.18s; }
+    .hero-stats { animation-delay: 0.24s; }
+    .hero-kicker { animation-delay: 0s; }
+
+    @keyframes floatIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     /* SECTIONS */
     .section {
       margin: 18px 0 22px;
+    }
+
+    .featured-dish {
+      background: linear-gradient(140deg, rgba(11, 42, 87, 0.9), rgba(28, 79, 150, 0.85));
+      border-radius: 20px;
+      padding: 14px;
+      color: #fff;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 12px;
+      align-items: center;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .featured-dish h3 {
+      margin: 0 0 6px;
+      font-size: 18.5px;
+      font-family: "Playfair Display", serif;
+    }
+
+    .featured-dish p {
+      margin: 0 0 10px;
+      font-size: 12.8px;
+      color: #e2ecff;
+    }
+
+    .featured-thumb {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .featured-thumb img {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      display: block;
     }
 
     .signature-section {
@@ -232,7 +358,8 @@
     .section-title h3 {
       margin: 0;
       font-family: "Playfair Display", serif;
-      font-size: 22px;
+      font-size: 21px;
+      letter-spacing: 0.2px;
     }
 
     .chip {
@@ -311,9 +438,15 @@
       background: var(--paper);
       border-radius: 18px;
       overflow: hidden;
-      box-shadow: 0 10px 20px rgba(16, 34, 43, 0.08);
+      box-shadow: var(--shadow-soft);
       border: 1px solid rgba(14, 26, 43, 0.04);
       animation: cardPop 0.6s ease forwards;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 16px 30px rgba(16, 34, 43, 0.12);
     }
 
     @keyframes cardPop {
@@ -350,12 +483,12 @@
 
     .menu-body h4 {
       margin: 0 0 6px;
-      font-size: 15px;
+      font-size: 14.5px;
     }
 
     .menu-body p {
       margin: 0 0 8px;
-      font-size: 13px;
+      font-size: 12.5px;
       color: #3f546b;
       min-height: 30px;
     }
@@ -365,6 +498,30 @@
       align-items: center;
       justify-content: space-between;
       gap: 6px;
+    }
+
+    .category-row {
+      grid-column: 1 / -1;
+      background: rgba(28, 79, 150, 0.08);
+      border: 1px solid rgba(28, 79, 150, 0.18);
+      color: var(--azure);
+      border-radius: 14px;
+      padding: 8px 12px;
+      font-weight: 700;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .menu-body .lang-select {
+      width: 100%;
+      margin-top: 8px;
+      border-radius: 12px;
+      border: 1px solid rgba(12, 34, 74, 0.18);
+      padding: 8px 10px;
+      font-size: 12px;
+      background: #fff;
+      color: var(--ink);
     }
 
     .price {
@@ -385,46 +542,6 @@
       font-weight: 700;
     }
 
-
-    /* CART */
-    .cart-card {
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(14, 26, 43, 0.05);
-    }
-
-    .cart-list {
-      display: grid;
-      gap: 8px;
-      margin: 10px 0;
-    }
-
-    .cart-item {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      font-size: 13px;
-    }
-
-    .cart-controls {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
-
-    .qty-btn {
-      border: none;
-      background: rgba(28, 79, 150, 0.12);
-      color: var(--azure);
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-weight: 700;
-    }
 
     .summary {
       display: grid;
@@ -504,16 +621,6 @@
       border-radius: 10px;
     }
 
-    .promo-row {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .promo-row input {
-      flex: 1;
-    }
-
     .pay-row {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -541,41 +648,6 @@
 
     .time-row.show {
       display: block;
-    }
-
-    .track-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    /* STATUS */
-    .status-row {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .status-step {
-      padding: 10px;
-      border-radius: 12px;
-      background: #f1f4fb;
-      font-size: 12px;
-      text-align: center;
-      font-weight: 600;
-      border: 1px solid rgba(14, 26, 43, 0.06);
-    }
-
-    .status-step.active {
-      background: rgba(247, 165, 49, 0.2);
-      border-color: rgba(247, 165, 49, 0.6);
-      color: #7a3d05;
-      animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
     }
 
     /* TI AK TI AK */
@@ -611,12 +683,186 @@
       border: 1px solid rgba(14, 26, 43, 0.05);
       font-size: 13px;
       color: #3f546b;
+      box-shadow: 0 8px 18px rgba(9, 24, 52, 0.08);
+    }
+
+    .commit-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .commit-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 12px;
+      border: 1px solid rgba(14, 26, 43, 0.08);
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      color: #3f546b;
+    }
+
+    .commit-card i {
+      color: var(--amber);
+      font-size: 16px;
+    }
+
+    .review-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .review-card-pro {
+      background: #fff;
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px solid rgba(14, 26, 43, 0.08);
+      box-shadow: var(--shadow-soft);
+      display: grid;
+      gap: 10px;
+    }
+
+    .fade-up {
+      animation: fadeUp 0.7s ease forwards;
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .fade-up.delay-1 { animation-delay: 0.1s; }
+    .fade-up.delay-2 { animation-delay: 0.2s; }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .review-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .reviewer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #0f2f61, #f7a531);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .review-stars {
+      color: #f7a531;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .review-text {
+      margin: 0;
+      font-size: 12.8px;
+      color: #3f546b;
     }
 
     .review-card strong {
       display: block;
       margin-bottom: 4px;
       color: #1f324a;
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .faq-item {
+      background: #ffffff;
+      border-radius: 14px;
+      border: 1px solid rgba(14, 26, 43, 0.08);
+      box-shadow: var(--shadow-soft);
+      padding: 12px 14px;
+      font-size: 13px;
+      color: #3f546b;
+    }
+
+    .faq-item strong {
+      display: block;
+      color: #1f324a;
+      margin-bottom: 6px;
+    }
+
+    .bestseller-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .bestseller-card {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 12px;
+      align-items: center;
+      padding: 12px;
+      border-radius: 16px;
+      background: #ffffff;
+      border: 1px solid rgba(14, 26, 43, 0.08);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .bestseller-thumb {
+      width: 86px;
+      height: 86px;
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid rgba(14, 26, 43, 0.08);
+    }
+
+    .bestseller-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .bestseller-card h4 {
+      margin: 0 0 4px;
+      font-size: 14px;
+    }
+
+    .bestseller-card p {
+      margin: 0 0 6px;
+      font-size: 12.5px;
+      color: #3f546b;
+    }
+
+    .contact-pro {
+      background: linear-gradient(145deg, rgba(11, 42, 87, 0.1), rgba(42, 120, 198, 0.08));
+      border: 1px solid rgba(14, 26, 43, 0.08);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .contact-pro .contact-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .contact-pro .teranga-link {
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 0.85em;
     }
 
     /* MAP */
@@ -643,6 +889,7 @@
       gap: 10px;
       box-shadow: 0 12px 30px rgba(9, 24, 52, 0.25);
       z-index: 8;
+      border: 1px solid rgba(255, 255, 255, 0.08);
     }
 
     .nav-btn {
@@ -656,6 +903,12 @@
       border: none;
       cursor: pointer;
       font-weight: 600;
+      transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      transform: translateY(-1px);
     }
 
     /* REVIEW MODAL */
@@ -1001,14 +1254,11 @@
     .field label,
     .summary,
     .review-list,
-    .cart-item {
-      color: #b7c3d9;
-    }
-
     .menu-card,
-    .cart-card,
     .order-card,
-    .review-card {
+    .review-card,
+    .review-card-pro,
+    .commit-card {
       background: #141d2f;
       border-color: rgba(233, 238, 247, 0.06);
     }
@@ -1022,8 +1272,8 @@
       .field input,
       .field textarea,
       .field select,
-      .promo-row input,
-      .lang-select {
+      .lang-select,
+      .menu-body .lang-select {
         background: #0f1626;
         color: #e9eef7;
         border-color: rgba(233, 238, 247, 0.15);
@@ -1031,12 +1281,6 @@
 
     .chip {
       background: rgba(42, 120, 198, 0.25);
-      color: #c8d9f2;
-    }
-
-    .status-step {
-      background: #121b2c;
-      border-color: rgba(233, 238, 247, 0.08);
       color: #c8d9f2;
     }
 
@@ -1052,6 +1296,35 @@
       .review-sheet {
         background: #141d2f;
         color: #e9eef7;
+      }
+
+      .review-text {
+        color: #b7c3d9;
+      }
+
+      .commit-card {
+        color: #b7c3d9;
+      }
+
+      .commit-card strong {
+        color: #e9eef7;
+      }
+
+      .faq-item,
+      .bestseller-card,
+      .contact-pro {
+        background: #141d2f;
+        border-color: rgba(233, 238, 247, 0.06);
+      }
+
+      .faq-item strong,
+      .bestseller-card h4 {
+        color: #e9eef7;
+      }
+
+      .faq-item,
+      .bestseller-card p {
+        color: #b7c3d9;
       }
 
       .notice {
@@ -1097,16 +1370,38 @@
           <img src="In-Side.jpg" alt="Salle du Lylia Restaurant">
         </div>
         <div class="hero-body">
+          <span class="hero-kicker">Teranga + Fraicheur</span>
           <h2 data-i18n="hero_title">Le gout qui donne envie de revenir</h2>
-          <p data-i18n="hero_desc">Commandez en quelques clics, payez a la livraison et suivez vos plats.</p>
-          <button class="pill-btn" type="button" onclick="showMenu()" data-i18n="menu_btn">Voir le menu</button>
+          <p data-i18n="hero_desc">Des recettes maison, des produits frais et une livraison rapide. Commandez en quelques clics.</p>
+          <div class="hero-actions">
+            <button class="pill-btn" type="button" onclick="showMenu()" data-i18n="menu_btn">Voir le menu</button>
+            <button class="pill-btn ghost" type="button" onclick="scrollToOrder()">Commander maintenant</button>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat"><strong>20-35 min</strong>Livraison</div>
+            <div class="hero-stat"><strong>4.8/5</strong>Avis clients</div>
+            <div class="hero-stat"><strong>Menu frais</strong>Tous les jours</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="featured-dish fade-up">
+          <div>
+            <h3>Plat du jour en priorite</h3>
+            <p>Decouvrez la specialite du jour, preparee le matin et servie chaude.</p>
+            <button class="pill-btn secondary" type="button" onclick="showMenu()">Commander le plat du jour</button>
+          </div>
+          <div class="featured-thumb">
+            <img src="images/menu semaine/Lundi.jpg" alt="Plat du jour">
+          </div>
         </div>
       </section>
 
       <section class="section" id="menuSection">
         <div class="section-title">
-          <h3 data-i18n="menu_title">Menus avec photos</h3>
-          <span class="chip" data-i18n="menu_chip">Mise a jour quotidienne</span>
+          <h3 data-i18n="menu_title">Nos menus signature</h3>
+          <span class="chip" data-i18n="menu_chip">Frais chaque jour</span>
         </div>
         <div class="notice" id="soldNotice">Plat du jour epuis&eacute; - choisissez un autre menu.</div>
         <div class="quick-actions">
@@ -1122,32 +1417,29 @@
 
       <section class="section">
         <div class="section-title">
-          <h3 data-i18n="cart_title">Panier express</h3>
-          <span class="chip" data-i18n="cart_chip">Total en direct</span>
+          <h3>Nos engagements</h3>
+          <span class="chip">Qualite Lylia</span>
         </div>
-        <div class="cart-card">
-          <div class="cart-list" id="cartList"></div>
-          <div class="promo-row">
-            <input id="promoCode" type="text" placeholder="Code promo">
-            <button class="pill-btn ghost" type="button" onclick="applyPromo()">Appliquer</button>
+        <div class="commit-grid">
+          <div class="commit-card fade-up delay-1">
+            <i class="fas fa-leaf"></i>
+            <strong>Fraicheur</strong>
+            <span>Produits selectionnes chaque matin.</span>
           </div>
-          <div class="summary">
-            <div class="summary-row">
-              <span>Sous-total</span>
-              <span id="subTotal">0 FCFA</span>
-            </div>
-            <div class="summary-row">
-              <span>Remise</span>
-              <span id="discountRow">0 FCFA</span>
-            </div>
-            <div class="summary-row">
-              <span>Frais de livraison</span>
-              <span id="deliveryFee">0 FCFA</span>
-            </div>
-            <div class="summary-row">
-              <span>Total</span>
-              <span id="grandTotal">0 FCFA</span>
-            </div>
+          <div class="commit-card fade-up delay-2">
+            <i class="fas fa-shield-heart"></i>
+            <strong>Hygiene</strong>
+            <span>Preparation propre et controlee.</span>
+          </div>
+          <div class="commit-card fade-up delay-1">
+            <i class="fas fa-truck-fast"></i>
+            <strong>Livraison</strong>
+            <span>Rapide et soignee, selon la zone.</span>
+          </div>
+          <div class="commit-card fade-up delay-2">
+            <i class="fas fa-headset"></i>
+            <strong>Service</strong>
+            <span>Equipe disponible et a l'ecoute.</span>
           </div>
         </div>
       </section>
@@ -1155,7 +1447,7 @@
       <section class="section">
         <div class="section-title">
           <h3>Plats du jour</h3>
-          <span class="chip">Appetissant</span>
+          <span class="chip">En images</span>
         </div>
         <div class="carousel" id="dishCarousel">
           <div class="carousel-track" id="carouselTrack">
@@ -1192,22 +1484,6 @@
         <div class="carousel-dots" id="carouselDots"></div>
       </section>
 
-      <section class="section">
-        <div class="section-title">
-          <h3 data-i18n="track_title">Suivi de commande</h3>
-          <span class="chip" data-i18n="track_chip">Statut</span>
-        </div>
-        <div class="status-row">
-          <div class="status-step active" id="stepReceived">Recu</div>
-          <div class="status-step" id="stepCooking">Preparation</div>
-          <div class="status-step" id="stepDelivery">En livraison</div>
-        </div>
-        <div class="track-actions">
-          <button class="pill-btn ghost" type="button" onclick="nextStatus()">Mettre a jour statut</button>
-          <a class="pill-btn" href="tel:+221711375861">Appeler livreur</a>
-        </div>
-      </section>
-
       <section class="section" id="orderSection">
         <div class="section-title">
           <h3 data-i18n="order_title">Valider ma commande</h3>
@@ -1215,7 +1491,7 @@
         </div>
         <div class="order-card">
           <div class="note-pay">
-            Paiement sur place ou a la livraison. Options disponibles : Wave et Orange Money.
+            Paiement flexible : sur place ou a la livraison. Wave et Orange Money disponibles.
           </div>
           <div class="pay-row">
             <a class="pay-btn" href="https://wave.com" target="_blank" rel="noopener">Payer avec Wave</a>
@@ -1274,8 +1550,8 @@
 
       <section class="section" id="reservationSection">
         <div class="section-title">
-          <h3>Reservation rapide</h3>
-          <span class="chip">Table</span>
+          <h3>Reservation de table</h3>
+          <span class="chip">Simple et rapide</span>
         </div>
         <div class="order-card">
           <div class="field">
@@ -1304,7 +1580,7 @@
 
       <section class="section">
         <div class="section-title">
-          <h3>Livraison Tiak Tiak</h3>
+          <h3>Livraison express</h3>
           <span class="chip">Equipe Lylia</span>
         </div>
         <div class="tiak-grid">
@@ -1333,61 +1609,103 @@
 
       <section class="section">
         <div class="section-title">
-          <h3>Promos du jour</h3>
-          <span class="chip">Bon plans</span>
-        </div>
-        <div class="menu-grid">
-          <div class="menu-card">
-            <div class="menu-thumb">
-              <span class="badge">Promo</span>
-              <img src="images/menu diner/pizza.jpg" alt="Pizza">
-            </div>
-            <div class="menu-body">
-              <h4>Pizza Lylia</h4>
-              <p>Fromage, poulet, sauce maison.</p>
-              <div class="menu-footer">
-                <span class="price">2 900 FCFA</span>
-                <button class="pill-btn" type="button" onclick="addToCart('pizza_lylia')">Ajouter</button>
-              </div>
-            </div>
-          </div>
-          <div class="menu-card">
-            <div class="menu-thumb">
-              <img src="images/menu diner/tacos.jpg" alt="Tacos">
-            </div>
-            <div class="menu-body">
-              <h4>Tacos maison</h4>
-              <p>Grille, sauce fromage.</p>
-              <div class="menu-footer">
-                <span class="price">3 200 FCFA</span>
-                <button class="pill-btn" type="button" onclick="addToCart('tacos')">Ajouter</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-title">
-          <h3>Avis clients</h3>
+          <h3>Ils parlent de nous</h3>
           <span class="chip">4.8/5</span>
         </div>
-        <div class="menu-grid">
-          <div class="review-card">
-            <strong>Coumba - 5/5</strong>
-            Saveurs authentiques et service rapide. J'adore.
+        <div class="review-grid">
+          <div class="review-card-pro fade-up delay-1">
+            <div class="review-head">
+              <div class="reviewer">
+                <div class="avatar">C</div>
+                <div>
+                  <strong>Coumba</strong><br>
+                  <span class="review-stars">★★★★★</span>
+                </div>
+              </div>
+              <span class="chip">5/5</span>
+            </div>
+            <p class="review-text">Saveurs authentiques, portions genereuses et livraison rapide. J'adore.</p>
           </div>
-          <div class="review-card">
-            <strong>Malick - 4.5/5</strong>
-            Tres bon yassa et livraison bien soigne.
+          <div class="review-card-pro fade-up delay-2">
+            <div class="review-head">
+              <div class="reviewer">
+                <div class="avatar">M</div>
+                <div>
+                  <strong>Malick</strong><br>
+                  <span class="review-stars">★★★★☆</span>
+                </div>
+              </div>
+              <span class="chip">4.5/5</span>
+            </div>
+            <p class="review-text">Tres bon yassa, service soigne et commande respectee.</p>
           </div>
         </div>
       </section>
 
       <section class="section">
         <div class="section-title">
-          <h3>Recommander rapidement</h3>
-          <span class="chip">Historique</span>
+          <h3>Nos best-sellers</h3>
+          <span class="chip">Tres demandes</span>
+        </div>
+        <div class="bestseller-grid">
+          <div class="bestseller-card fade-up delay-1">
+            <div class="bestseller-thumb">
+              <img src="images/menu diner/burger.jpg" alt="Burger">
+            </div>
+            <div>
+              <h4>Burger</h4>
+              <p>Le classique qui fait toujours plaisir.</p>
+              <span class="price">Simple / Double / Maxi</span>
+            </div>
+          </div>
+          <div class="bestseller-card fade-up delay-2">
+            <div class="bestseller-thumb">
+              <img src="images/menu diner/tacos.jpg" alt="Tacos">
+            </div>
+            <div>
+              <h4>Tacos</h4>
+              <p>Grille, sauce maison et bien garni.</p>
+              <span class="price">2 500 FCFA</span>
+            </div>
+          </div>
+          <div class="bestseller-card fade-up delay-1">
+            <div class="bestseller-thumb">
+              <img src="images/menu diner/Chawarma.jpg" alt="Chawarma">
+            </div>
+            <div>
+              <h4>Chawarma</h4>
+              <p>Saveurs relevees et viande tendre.</p>
+              <span class="price">Simple / Double</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">
+          <h3>Questions frequentes</h3>
+          <span class="chip">FAQ</span>
+        </div>
+        <div class="faq-list">
+          <div class="faq-item">
+            <strong>Comment commander rapidement ?</strong>
+            Cliquez sur “Commander maintenant”, choisissez vos options et confirmez via WhatsApp.
+          </div>
+          <div class="faq-item">
+            <strong>Quels moyens de paiement acceptez-vous ?</strong>
+            Cash, Wave et Orange Money sont acceptes sur place ou a la livraison.
+          </div>
+          <div class="faq-item">
+            <strong>Quel est le delai de livraison ?</strong>
+            En general 20 a 35 minutes selon la zone.
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">
+          <h3>Commander a nouveau</h3>
+          <span class="chip">En 1 clic</span>
         </div>
         <div class="order-card">
           <p id="lastOrderText" style="font-size:13px;color:#3f546b;margin:0 0 10px;">
@@ -1399,10 +1717,37 @@
 
       <section class="section signature-section">
         <div class="section-title">
-          <h3>Contact developpeur</h3>
-          <span class="chip">Signature</span>
+          <h3>Contact & reseaux</h3>
+          <span class="chip">Equipe</span>
         </div>
-        <div class="teranga-signature">
+        <div class="contact-pro">
+          <div class="section-title" style="margin-bottom:8px;">
+            <h3 style="font-size:18px;">Besoin d'un site pro ?</h3>
+            <span class="chip">Disponible</span>
+          </div>
+          <p style="margin:0 0 10px;font-size:13px;color:#3f546b;">
+            Creation de sites vitrines et menus digitaux. Contact rapide par WhatsApp ou appel.
+          </p>
+          <div class="contact-grid">
+            <a href="https://wa.me/221783068748" class="teranga-link wa">
+              <i class="fab fa-whatsapp"></i>
+              <span>78 306 87 48</span>
+            </a>
+            <a href="#" class="teranga-link tk">
+              <i class="fab fa-tiktok"></i>
+              <span>@khalilou.spec</span>
+            </a>
+            <a href="mailto:khalilou.spec@gmail.com" class="teranga-link em">
+              <i class="fas fa-envelope"></i>
+              <span>khalilou.spec</span>
+            </a>
+            <a href="tel:+221783068748" class="teranga-link gh">
+              <i class="fas fa-phone"></i>
+              <span>Appeler</span>
+            </a>
+          </div>
+        </div>
+        <div class="teranga-signature" style="margin-top:16px;">
           <div class="teranga-header">
             <span class="welcome">ⵣ DAKAR • SENEGAL ⵣ</span>
           </div>
@@ -1461,7 +1806,7 @@
 
       <section class="section" id="infoSection">
         <div class="section-title">
-          <h3>Infos pratiques</h3>
+          <h3>Infos & horaires</h3>
           <span class="chip">Ouvert</span>
         </div>
         <div class="menu-grid">
@@ -1546,12 +1891,10 @@
   <script>
     const app = document.getElementById("app");
     const menuGrid = document.getElementById("menuGrid");
-    const cartList = document.getElementById("cartList");
     const subTotalEl = document.getElementById("subTotal");
     const discountRowEl = document.getElementById("discountRow");
     const deliveryFeeEl = document.getElementById("deliveryFee");
     const grandTotalEl = document.getElementById("grandTotal");
-    const promoCodeEl = document.getElementById("promoCode");
     const lastOrderText = document.getElementById("lastOrderText");
     const carouselTrack = document.getElementById("carouselTrack");
     const carouselDots = document.getElementById("carouselDots");
@@ -1559,28 +1902,123 @@
 
     const data = {
       semaine: [
-        { id: "lundi", name: "Lundi", price: 3500, img: "images/menu semaine/Lundi.jpg", desc: "Plat maison du lundi." },
-        { id: "mardi", name: "Mardi", price: 3800, img: "images/menu semaine/mardi.jpg", desc: "Menu special mardi." },
-        { id: "mercredi", name: "Mercredi", price: 3800, img: "images/menu semaine/mercredi.jpg", desc: "Recette traditionnelle." },
-        { id: "jeudi", name: "Jeudi", price: 3600, img: "images/menu semaine/jeudi.jpg", desc: "Cuisine du terroir." },
-        { id: "vendredi", name: "Vendredi", price: 4000, img: "images/menu semaine/vendredi.jpg", desc: "Plat du vendredi." },
-        { id: "samedi", name: "Samedi", price: 4200, img: "images/menu semaine/samedi.jpg", desc: "Menu festif." },
-        { id: "dimanche", name: "Dimanche", price: 4500, img: "images/menu semaine/dimanche.jpg", desc: "Special dimanche." }
+        { id: "lundi", name: "Lundi", price: 1500, img: "images/menu semaine/Lundi.jpg", desc: "Plat maison du lundi." },
+        { id: "mardi", name: "Mardi", price: 1500, img: "images/menu semaine/mardi.jpg", desc: "Menu special mardi." },
+        { id: "mercredi", name: "Mercredi", price: 1500, img: "images/menu semaine/mercredi.jpg", desc: "Recette traditionnelle." },
+        { id: "jeudi", name: "Jeudi", price: 1500, img: "images/menu semaine/jeudi.jpg", desc: "Cuisine du terroir." },
+        { id: "vendredi", name: "Vendredi", price: 1500, img: "images/menu semaine/vendredi.jpg", desc: "Plat du vendredi." },
+        { id: "samedi", name: "Samedi", price: 1500, img: "images/menu semaine/samedi.jpg", desc: "Menu festif." },
+        { id: "dimanche", name: "Dimanche", price: 1500, img: "images/menu semaine/dimanche.jpg", desc: "Special dimanche." }
       ],
       diner: [
+        { id: "plat_du_jour", name: "Plat du jour", price: 1500, img: "images/menu semaine/Lundi.jpg", desc: "Selon arrivage.", category: "Plats" },
         { id: "dibi", name: "Dibi", price: 4000, img: "images/menu diner/dibi.jpg", desc: "Brochettes grillees." },
-        { id: "soupe", name: "Soupe poulet", price: 2500, img: "images/menu diner/soupe_poulet.jpg", desc: "Rechauffe et reconfort." },
-        { id: "sandwich", name: "Sandwich brochettes", price: 3200, img: "images/menu diner/sandwich_brochettes.jpg", desc: "Servi avec frites." },
-        { id: "pizza", name: "Pizza", price: 2900, img: "images/menu diner/pizza.jpg", desc: "Fromage et poulet." },
-        { id: "tacos", name: "Tacos", price: 3200, img: "images/menu diner/tacos.jpg", desc: "Sauce maison." }
+        { id: "soupe", name: "Soupe poulet", price: 2500, img: "images/menu diner/soupe_poulet.jpg", desc: "Rechauffe et reconfort.", category: "Plats" },
+        { id: "pizza", name: "Pizza", price: 2900, img: "images/menu diner/pizza.jpg", desc: "Fromage et poulet.", category: "Fast-food" },
+        { id: "tacos", name: "Tacos", price: 2500, img: "images/menu diner/tacos.jpg", desc: "Sauce maison.", category: "Fast-food" },
+        {
+          id: "fataya",
+          name: "Fataya",
+          img: "images/menu diner/fataya.jpg",
+          desc: "Snacking rapide.",
+          variants: [
+            { label: "Simple", price: 700 },
+            { label: "Double", price: 1000 }
+          ],
+          category: "Fast-food"
+        },
+        {
+          id: "burger",
+          name: "Burger",
+          img: "images/menu diner/burger.jpg",
+          desc: "Classique.",
+          variants: [
+            { label: "Simple", price: 1500 },
+            { label: "Double", price: 2000 },
+            { label: "Maxi", price: 2500 }
+          ],
+          category: "Fast-food"
+        },
+        {
+          id: "sandwich_v",
+          name: "Sandwich",
+          img: "images/menu diner/sandwich_brochettes.jpg",
+          desc: "Frais et savoureux.",
+          variants: [
+            { label: "Simple", price: 1000 },
+            { label: "Double", price: 1500 }
+          ],
+          category: "Fast-food"
+        },
+        {
+          id: "norvegienne",
+          name: "Norvegienne",
+          img: "images/menu diner/norvegienne.jpg",
+          desc: "Fromage et sauce.",
+          variants: [
+            { label: "Simple", price: 1600 },
+            { label: "Double", price: 2000 }
+          ],
+          category: "Fast-food"
+        },
+        {
+          id: "chawarma",
+          name: "Chawarma",
+          img: "images/menu diner/Chawarma.jpg",
+          desc: "Poulet et sauce.",
+          variants: [
+            { label: "Simple", price: 1600 },
+            { label: "Double", price: 2000 }
+          ],
+          category: "Fast-food"
+        },
+        { id: "crepe_sucre", name: "Crepe sucre", price: 1000, img: "images/menu diner/crepes-sucre.jpg", desc: "Douce et legere.", category: "Desserts" },
+        {
+          id: "crepe_sale",
+          name: "Crepe sale",
+          img: "images/menu diner/crepes-salees.jpg",
+          desc: "Fromage et garniture.",
+          variants: [
+            { label: "Simple", price: 1500 },
+            { label: "Double", price: 2000 },
+            { label: "Maxi", price: 2500 }
+          ],
+          category: "Desserts"
+        },
+        { id: "box_sucre_sale", name: "Box sucre et sale", price: 1000, img: "images/menu diner/box sucree et salee.jpg", desc: "A partir de 1000.", category: "Snacks" },
+        {
+          id: "cake",
+          name: "Cake",
+          img: "images/menu diner/cakes.jpg",
+          desc: "Fait maison.",
+          variants: [
+            { label: "Classique", price: 600 },
+            { label: "Chocolat", price: 800 }
+          ],
+          category: "Desserts"
+        },
+        { id: "nems", name: "Nems", price: 300, img: "images/menu diner/nems.jpg", desc: "Croustillants.", category: "Snacks" },
+        {
+          id: "beignets",
+          name: "Beignets",
+          img: "images/menu diner/beignets.jpg",
+          desc: "Moelleux.",
+          variants: [
+            { label: "Classique", price: 200 },
+            { label: "Choco", price: 300 }
+          ],
+          category: "Desserts"
+        }
       ],
       jus: [
-        { id: "bissap", name: "Bissap", price: 800, img: "images/jus/bissap.jpg", desc: "Jus naturel frais." },
-        { id: "bouye", name: "Bouye", price: 900, img: "images/jus/bouye.jpg", desc: "Cremeux et doux." },
-        { id: "citron", name: "Citron", price: 700, img: "images/jus/citron.jpg", desc: "Frais et acidule." },
-        { id: "coctail", name: "Cocktail", price: 1200, img: "images/jus/coctail.jpg", desc: "Mix de fruits." },
-        { id: "ditakh", name: "Ditakh", price: 1300, img: "images/jus/ditakh.jpg", desc: "Saveur locale." },
-        { id: "moringa", name: "Moringa", price: 1000, img: "images/jus/moringua.jpg", desc: "Energie naturelle." }
+        { id: "bissap", name: "Bissap", price: 800, img: "images/jus/bissap.jpg", desc: "Jus naturel frais.", category: "Boissons" },
+        { id: "bouye", name: "Bouye", price: 900, img: "images/jus/bouye.jpg", desc: "Cremeux et doux.", category: "Boissons" },
+        { id: "citron", name: "Citron", price: 700, img: "images/jus/citron.jpg", desc: "Frais et acidule.", category: "Boissons" },
+        { id: "coctail", name: "Cocktail", price: 1200, img: "images/jus/coctail.jpg", desc: "Mix de fruits.", category: "Boissons" },
+        { id: "ditakh", name: "Ditakh", price: 1300, img: "images/jus/ditakh.jpg", desc: "Saveur locale.", category: "Boissons" },
+        { id: "moringa", name: "Moringa", price: 1000, img: "images/jus/moringua.jpg", desc: "Energie naturelle.", category: "Boissons" },
+        { id: "canette", name: "Canette", price: 500, img: "images/jus/canettes.jpg", desc: "Boisson fraiche.", category: "Boissons" },
+        
       ]
     };
 
@@ -1601,9 +2039,20 @@
     function renderMenu() {
       menuGrid.innerHTML = "";
       const items = getOrderedItems();
+      let lastCategory = "";
       items.forEach((item, index) => {
         const isToday = currentTab === "semaine" && item.id === getTodayKey();
         const isSoldOut = isToday && soldOutToday;
+        const hasVariants = Array.isArray(item.variants) && item.variants.length;
+        const initialPrice = hasVariants ? item.variants[0].price : item.price;
+        const category = item.category || "";
+        if (category && category !== lastCategory) {
+          const categoryRow = document.createElement("div");
+          categoryRow.className = "category-row";
+          categoryRow.textContent = category;
+          menuGrid.appendChild(categoryRow);
+          lastCategory = category;
+        }
         const card = document.createElement("div");
         card.className = "menu-card";
         card.innerHTML = `
@@ -1615,9 +2064,14 @@
             <h4>${item.name}</h4>
             <p>${item.desc}</p>
             <div class="menu-footer">
-              <span class="price">${formatFCFA(item.price)}</span>
+              <span class="price" id="price-${item.id}">${formatFCFA(initialPrice)}</span>
               <button class="pill-btn ${isSoldOut ? 'ghost' : ''}" type="button" onclick="addToCart('${item.id}')" ${isSoldOut ? 'disabled' : ''}>${isSoldOut ? 'Indisponible' : 'Ajouter'}</button>
             </div>
+            ${hasVariants ? `
+              <select class="lang-select" id="opt-${item.id}" onchange="updateVariantPrice('${item.id}')">
+                ${item.variants.map((variant, vIndex) => `<option value="${vIndex}">${variant.label} - ${formatFCFA(variant.price)}</option>`).join("")}
+              </select>
+            ` : ""}
           </div>
         `;
         menuGrid.appendChild(card);
@@ -1650,49 +2104,35 @@
     function addToCart(id) {
       const item = findItemById(id);
       if (!item) return;
-      cart[id] = cart[id] ? cart[id] + 1 : 1;
-      renderCart();
-    }
-
-    function changeQty(id, delta) {
-      if (!cart[id]) return;
-      cart[id] += delta;
-      if (cart[id] <= 0) delete cart[id];
+      const optionIndex = getSelectedOptionIndex(item);
+      const key = optionIndex !== null ? `${id}|${optionIndex}` : id;
+      if (!cart[key]) {
+        cart[key] = { id, optionIndex, qty: 0 };
+      }
+      cart[key].qty += 1;
       renderCart();
     }
 
     function renderCart() {
-      cartList.innerHTML = "";
       let subtotal = 0;
-      Object.keys(cart).forEach(id => {
-        const item = findItemById(id);
+      Object.keys(cart).forEach(key => {
+        const entry = cart[key];
+        const item = findItemById(entry.id);
         if (!item) return;
-        const qty = cart[id];
-        subtotal += item.price * qty;
-        const row = document.createElement("div");
-        row.className = "cart-item";
-        row.innerHTML = `
-          <span>${item.name} x${qty}</span>
-          <div class="cart-controls">
-            <button class="qty-btn" onclick="changeQty('${id}', -1)">-</button>
-            <button class="qty-btn" onclick="changeQty('${id}', 1)">+</button>
-          </div>
-        `;
-        cartList.appendChild(row);
+        const qty = entry.qty;
+        const price = getItemPrice(item, entry.optionIndex);
+        subtotal += price * qty;
       });
-      if (!Object.keys(cart).length) {
-        cartList.innerHTML = "<span style='font-size:12px;color:#667790;'>Votre panier est vide.</span>";
-      }
       updateTotals(subtotal);
     }
 
     function updateTotals(subtotal) {
       const discount = Math.round(subtotal * (discountPercent / 100));
       const total = Math.max(0, subtotal - discount + deliveryFee);
-      subTotalEl.textContent = formatFCFA(subtotal);
-      discountRowEl.textContent = formatFCFA(discount);
-      deliveryFeeEl.textContent = formatFCFA(deliveryFee);
-      grandTotalEl.textContent = formatFCFA(total);
+      if (subTotalEl) subTotalEl.textContent = formatFCFA(subtotal);
+      if (discountRowEl) discountRowEl.textContent = formatFCFA(discount);
+      if (deliveryFeeEl) deliveryFeeEl.textContent = formatFCFA(deliveryFee);
+      if (grandTotalEl) grandTotalEl.textContent = formatFCFA(total);
     }
 
     function updateDeliveryFee() {
@@ -1720,9 +2160,10 @@
 
     function getSubtotal() {
       let subtotal = 0;
-      Object.keys(cart).forEach(id => {
-        const item = findItemById(id);
-        if (item) subtotal += item.price * cart[id];
+      Object.keys(cart).forEach(key => {
+        const entry = cart[key];
+        const item = findItemById(entry.id);
+        if (item) subtotal += getItemPrice(item, entry.optionIndex) * entry.qty;
       });
       return subtotal;
     }
@@ -1733,6 +2174,36 @@
 
     function formatFCFA(amount) {
       return amount.toLocaleString("fr-FR") + " FCFA";
+    }
+
+    function updateVariantPrice(id) {
+      const item = findItemById(id);
+      if (!item || !item.variants) return;
+      const selectEl = document.getElementById(`opt-${id}`);
+      if (!selectEl) return;
+      const optionIndex = parseInt(selectEl.value, 10) || 0;
+      const priceEl = document.getElementById(`price-${id}`);
+      if (priceEl) priceEl.textContent = formatFCFA(getItemPrice(item, optionIndex));
+    }
+
+    function getSelectedOptionIndex(item) {
+      if (!item || !Array.isArray(item.variants) || !item.variants.length) return null;
+      const selectEl = document.getElementById(`opt-${item.id}`);
+      if (!selectEl) return 0;
+      const optionIndex = parseInt(selectEl.value, 10);
+      return Number.isNaN(optionIndex) ? 0 : optionIndex;
+    }
+
+    function getItemPrice(item, optionIndex) {
+      if (!item.variants || optionIndex === null) return item.price;
+      const variant = item.variants[optionIndex] || item.variants[0];
+      return variant.price;
+    }
+
+    function getItemLabel(item, optionIndex) {
+      if (!item.variants || optionIndex === null) return item.name;
+      const variant = item.variants[optionIndex] || item.variants[0];
+      return `${item.name} - ${variant.label}`;
     }
 
     function sendOrder() {
@@ -1749,9 +2220,11 @@
       const discount = Math.round(subtotal * (discountPercent / 100));
       const total = Math.max(0, subtotal - discount + deliveryFee);
       reviewList.innerHTML = Object.keys(cart).map(id => {
-        const item = findItemById(id);
-        const qty = cart[id];
-        return item ? `<span><strong>${item.name} x${qty}</strong><span>${formatFCFA(item.price * qty)}</span></span>` : "";
+        const entry = cart[id];
+        const item = findItemById(entry.id);
+        const qty = entry.qty;
+        const price = item ? getItemPrice(item, entry.optionIndex) : 0;
+        return item ? `<span><strong>${getItemLabel(item, entry.optionIndex)} x${qty}</strong><span>${formatFCFA(price * qty)}</span></span>` : "";
       }).join("");
 
       document.getElementById("reviewSubTotal").textContent = formatFCFA(subtotal);
@@ -1782,8 +2255,9 @@
 
       const itemsText = Object.keys(cart).length
         ? Object.keys(cart).map(id => {
-            const item = findItemById(id);
-            return item ? `${item.name} x${cart[id]}` : "";
+            const entry = cart[id];
+            const item = findItemById(entry.id);
+            return item ? `${getItemLabel(item, entry.optionIndex)} x${entry.qty}` : "";
           }).filter(Boolean).join(", ")
         : "Aucun article";
 
@@ -1808,10 +2282,6 @@
         "Notes: " + (notes || "Aucune");
 
       saveLastOrder(message);
-      document.getElementById("stepReceived").classList.add("active");
-      document.getElementById("stepCooking").classList.remove("active");
-      document.getElementById("stepDelivery").classList.remove("active");
-
       closeReview();
       window.open("https://wa.me/221711375861?text=" + encodeURIComponent(message));
     }
@@ -1832,25 +2302,10 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function applyPromo() {
-      const code = promoCodeEl.value.trim().toUpperCase();
-      const promos = { "TERANGA10": 10, "LYLIA5": 5, "DAKAR7": 7 };
-      discountPercent = promos[code] || 0;
-      updateTotals(getSubtotal());
-    }
-
     function toggleSoldOut() {
       soldOutToday = !soldOutToday;
       soldNotice.classList.toggle("show", soldOutToday);
       renderMenu();
-    }
-
-    function nextStatus() {
-      const steps = ["stepReceived", "stepCooking", "stepDelivery"];
-      const currentIndex = steps.findIndex(id => document.getElementById(id).classList.contains("active"));
-      steps.forEach(id => document.getElementById(id).classList.remove("active"));
-      const nextIndex = (currentIndex + 1) % steps.length;
-      document.getElementById(steps[nextIndex]).classList.add("active");
     }
 
     function sendReservation() {
@@ -1875,10 +2330,10 @@
           subtitle: "Cuisine senegalaise, livraison Tiak Tiak",
           order_btn: "Commander",
           hero_title: "Le gout qui donne envie de revenir",
-          hero_desc: "Commandez en quelques clics, payez a la livraison et suivez vos plats.",
+          hero_desc: "Des recettes maison, des produits frais et une livraison rapide. Commandez en quelques clics.",
           menu_btn: "Voir le menu",
-          menu_title: "Menus avec photos",
-          menu_chip: "Mise a jour quotidienne",
+          menu_title: "Nos menus signature",
+          menu_chip: "Frais chaque jour",
           cart_title: "Panier express",
           cart_chip: "Total en direct",
           track_title: "Suivi de commande",
@@ -1890,10 +2345,10 @@
           subtitle: "Lekku Senegaal, jottali Tiak Tiak",
           order_btn: "Joxal",
           hero_title: "Nekk ci xel",
-          hero_desc: "Joxal sa ndigal ci ndimbal bu gaaw.",
+          hero_desc: "Joxal sa ndigal ci ndimbal bu gaaw, lekku bu saf.",
           menu_btn: "Gis menu",
-          menu_title: "Menu ak foto",
-          menu_chip: "Yeesal bés bu ne",
+          menu_title: "Menu bu bees",
+          menu_chip: "Frais bes bu ne",
           cart_title: "Panier bu gaaw",
           cart_chip: "Total ci ngay",
           track_title: "Topp ndigal",
@@ -1905,10 +2360,10 @@
           subtitle: "Senegalese food, fast Tiak Tiak delivery",
           order_btn: "Order",
           hero_title: "A taste you will love",
-          hero_desc: "Order in a few taps and track your meal.",
+          hero_desc: "Homemade recipes, fresh ingredients, and fast delivery.",
           menu_btn: "See menu",
-          menu_title: "Menus with photos",
-          menu_chip: "Daily update",
+          menu_title: "Signature menus",
+          menu_chip: "Fresh every day",
           cart_title: "Quick cart",
           cart_chip: "Live total",
           track_title: "Order tracking",
@@ -2003,3 +2458,4 @@
   </script>
 </body>
 </html>
+
