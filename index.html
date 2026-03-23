@@ -865,6 +865,30 @@
       font-size: 0.85em;
     }
 
+    .pdf-card {
+      background: #ffffff;
+      border-radius: 18px;
+      padding: 14px;
+      border: 1px solid rgba(14, 26, 43, 0.08);
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .pdf-meta {
+      display: grid;
+      gap: 6px;
+      font-size: 13px;
+      color: #3f546b;
+    }
+
+    .pdf-meta strong {
+      color: #1f324a;
+    }
+
     /* MAP */
     .map-frame {
       width: 100%;
@@ -1312,18 +1336,21 @@
 
       .faq-item,
       .bestseller-card,
-      .contact-pro {
+      .contact-pro,
+      .pdf-card {
         background: #141d2f;
         border-color: rgba(233, 238, 247, 0.06);
       }
 
       .faq-item strong,
-      .bestseller-card h4 {
+      .bestseller-card h4,
+      .pdf-meta strong {
         color: #e9eef7;
       }
 
       .faq-item,
-      .bestseller-card p {
+      .bestseller-card p,
+      .pdf-meta {
         color: #b7c3d9;
       }
 
@@ -1413,6 +1440,20 @@
           <button class="tab-btn" id="tabJus" type="button" onclick="setTab('jus')">Jus</button>
         </div>
         <div class="menu-grid" id="menuGrid"></div>
+      </section>
+
+      <section class="section">
+        <div class="section-title">
+          <h3>Menu PDF</h3>
+          <span class="chip">A4 Paysage</span>
+        </div>
+        <div class="pdf-card">
+          <div class="pdf-meta">
+            <strong>MENU A4 Paysage</strong>
+            <span>Version PDF a telecharger.</span>
+          </div>
+          <a class="pill-btn" href="MENU A4 paysage.pdf" download="MENU A4 Paysage.pdf">Telecharger le menu</a>
+        </div>
       </section>
 
       <section class="section">
@@ -2458,4 +2499,3 @@
   </script>
 </body>
 </html>
-
