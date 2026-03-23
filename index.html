@@ -73,6 +73,136 @@
       }
     }
 
+    /* WELCOME POPUP */
+    .welcome-toast {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translate(-50%, -16px);
+      width: min(420px, calc(100% - 28px));
+      background: linear-gradient(135deg, rgba(8, 18, 36, 0.98), rgba(17, 46, 90, 0.98));
+      color: #ffffff;
+      border-radius: 18px;
+      padding: 14px 16px 12px;
+      box-shadow: 0 20px 50px rgba(7, 14, 28, 0.45);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: center;
+      gap: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      z-index: 25;
+      overflow: hidden;
+    }
+
+    .welcome-toast.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translate(-50%, 0);
+    }
+
+    .welcome-badge {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #f6b24a, #d9771c);
+      display: grid;
+      place-items: center;
+      color: #1c1c1c;
+      font-size: 18px;
+      box-shadow: 0 10px 24px rgba(217, 119, 28, 0.35);
+      padding: 6px;
+    }
+
+    .welcome-badge img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      border-radius: 10px;
+      background: #fff;
+      padding: 4px;
+    }
+
+    .welcome-text {
+      display: grid;
+      gap: 4px;
+      font-size: 12.8px;
+    }
+
+    .welcome-text strong {
+      font-size: 14.5px;
+      letter-spacing: 0.3px;
+    }
+
+    .welcome-close {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .welcome-close:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .welcome-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .welcome-cta {
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      color: #fff;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .welcome-cta:hover {
+      background: rgba(255, 255, 255, 0.22);
+    }
+
+    .welcome-progress {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      bottom: 8px;
+      height: 3px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.12);
+      overflow: hidden;
+    }
+
+    .welcome-progress::after {
+      content: "";
+      display: block;
+      height: 100%;
+      width: 100%;
+      transform: translateX(-100%);
+      background: linear-gradient(90deg, #f6b24a, #ffd38a);
+      animation: toastProgress 7s linear forwards;
+    }
+
+    .welcome-toast.show .welcome-progress::after {
+      animation-play-state: running;
+    }
+
+    @keyframes toastProgress {
+      to {
+        transform: translateX(0);
+      }
+    }
+
     /* APP SHELL */
     .app-shell {
       width: min(480px, 100%);
@@ -1367,6 +1497,21 @@
     </video>
   </div>
 
+  <div class="welcome-toast" id="welcomeToast" role="status" aria-live="polite">
+    <div class="welcome-badge">
+      <img src="logo.png" alt="Logo Lylia Restaurant">
+    </div>
+    <div class="welcome-text">
+      <strong>Bienvenue chez Lylia Restaurant</strong>
+      <span>Teranga, saveurs maison et livraison express. Decouvrez le menu.</span>
+    </div>
+    <div class="welcome-actions">
+      <button class="welcome-cta" type="button" onclick="showMenu()">Voir menu</button>
+      <button class="welcome-close" type="button" onclick="hideWelcome()">Fermer</button>
+    </div>
+    <div class="welcome-progress"></div>
+  </div>
+
   <div class="app-shell" id="app">
     <header class="app-header">
       <div class="brand-row">
@@ -1444,16 +1589,27 @@
 
       <section class="section">
         <div class="section-title">
-          <h3>Menu PDF</h3>
-          <span class="chip">A4 Paysage</span>
+          <h3>Menu a telecharger</h3>
+          <span class="chip">JPG</span>
         </div>
         <div class="pdf-card">
           <div class="pdf-meta">
-            <strong>MENU A4 Paysage</strong>
-            <span>Version PDF a telecharger.</span>
+            <strong>Menu en image</strong>
+            <span>Telechargement rapide au format JPG.</span>
           </div>
-          <a class="pill-btn" href="MENU A4 paysage.pdf" download="MENU A4 Paysage.pdf">Telecharger le menu</a>
+          <div class="quick-actions" style="margin:0;">
+            <a class="pill-btn" href="MENU.jpg" download="MENU.jpg">Telecharger JPG</a>
+          </div>
         </div>
+        <a class="menu-card" href="MENU.jpg" download="MENU.jpg" style="margin-top:12px;">
+          <div class="menu-thumb">
+            <img src="MENU.jpg" alt="Apercu du menu">
+          </div>
+          <div class="menu-body">
+            <h4>Apercu du menu (JPG)</h4>
+            <p>Cliquez pour telecharger directement.</p>
+          </div>
+        </a>
       </section>
 
       <section class="section">
@@ -1940,6 +2096,7 @@
     const carouselTrack = document.getElementById("carouselTrack");
     const carouselDots = document.getElementById("carouselDots");
     const soldNotice = document.getElementById("soldNotice");
+    const welcomeToast = document.getElementById("welcomeToast");
 
     const data = {
       semaine: [
@@ -2076,6 +2233,19 @@
     setTimeout(() => {
       app.classList.add("ready");
     }, 900);
+
+    function showWelcome() {
+      if (!welcomeToast) return;
+      welcomeToast.classList.add("show");
+      setTimeout(() => {
+        hideWelcome();
+      }, 7000);
+    }
+
+    function hideWelcome() {
+      if (!welcomeToast) return;
+      welcomeToast.classList.remove("show");
+    }
 
     function renderMenu() {
       menuGrid.innerHTML = "";
@@ -2496,6 +2666,10 @@
     updateLastOrder();
     setupCarousel();
     setLanguage(document.getElementById("langSelect").value);
+
+    setTimeout(() => {
+      showWelcome();
+    }, 4400);
   </script>
 </body>
 </html>
