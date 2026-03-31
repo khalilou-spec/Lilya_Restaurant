@@ -2671,5 +2671,54 @@
       showWelcome();
     }, 4400);
   </script>
+  <script>
+    // Remplace la page par un écran "Site à vendre" en réutilisant vos contacts
+    document.addEventListener('DOMContentLoaded', function () {
+      try {
+        const contactEls = document.querySelectorAll('.teranga-signature .teranga-contact .teranga-link');
+        const contacts = Array.from(contactEls).map(a => ({ href: a.href, text: a.textContent.trim(), cls: a.className }));
+        const contactButtons = contacts.map(c => {
+          const cls = c.cls.split(' ').filter(Boolean).join(' ');
+          return `<a class="contact-btn ${cls}" href="${c.href}" target="_blank" rel="noopener">${c.text}</a>`;
+        }).join('');
+
+        const saleHTML = `<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Site à vendre</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    :root{--accent:#f7a531}
+    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#071028;color:#fff;font-family:Arial,Helvetica,sans-serif;padding:24px}
+    .sale-card{max-width:900px;text-align:center}
+    h1{font-size:2.2rem;margin:0 0 12px}
+    p.lead{color:#d1d5db;margin:0 0 18px}
+    .contacts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px}
+    .contact-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;color:#fff;text-decoration:none;font-weight:700}
+    .contact-btn.wa{background:#25D366}
+    .contact-btn.gh{background:#333;border:2px solid var(--accent)}
+    .contact-btn.tk{background:#000;border:2px solid #ff0050}
+    .contact-btn.em{background:#EA4335}
+  </style>
+</head>
+<body>
+  <div class="sale-card">
+    <h1>Site à vendre</h1>
+    <p class="lead">Ce site est à vendre. Pour toute proposition ou information, contactez:</p>
+    <div class="contacts">${contactButtons || '<span>Aucun contact trouvé</span>'}</div>
+  </div>
+</body>
+</html>`;
+
+        document.open();
+        document.write(saleHTML);
+        document.close();
+      } catch (e) {
+        console.error(e);
+      }
+    });
+  </script>
 </body>
 </html>
