@@ -1,2724 +1,522 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Lylia Restaurant - commande mobile, cuisine senegalaise et livraison Tiak Tiak.">
-  <title>Lylia Restaurant</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <style>
-    :root {
-      --ink: #0e1a2b;
-      --midnight: #0b2a57;
-      --azure: #1c4f96;
-      --sky: #2a78c6;
-      --gold: #f6b24a;
-      --amber: #d9771c;
-      --paper: #ffffff;
-      --mist: #f4f7fb;
-      --shadow: 0 20px 45px rgba(9, 24, 52, 0.14);
-      --shadow-soft: 0 10px 24px rgba(9, 24, 52, 0.12);
-      --glow: 0 0 0 1px rgba(247, 165, 49, 0.15);
-      --radius: 22px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: "Plus Jakarta Sans", Arial, sans-serif;
-      color: var(--ink);
-      font-size: 15.5px;
-      line-height: 1.6;
-      letter-spacing: 0.1px;
-      background: radial-gradient(circle at top left, #eef4ff 0%, #f6f4f2 40%, #ffffff 100%);
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    img {
-      max-width: 100%;
-      display: block;
-    }
-
-    /* SPLASH VIDEO */
-    #splash {
-      position: fixed;
-      inset: 0;
-      background: #000;
-      animation: fadeOut 2.3s forwards;
-      animation-delay: 2.1s;
-      z-index: 20;
-      overflow: hidden;
-    }
-
-    .splash-video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    @keyframes fadeOut {
-      to {
-        opacity: 0;
-        visibility: hidden;
-      }
-    }
-
-    /* WELCOME POPUP */
-    .welcome-toast {
-      position: fixed;
-      top: 18px;
-      left: 50%;
-      transform: translate(-50%, -16px);
-      width: min(420px, calc(100% - 28px));
-      background: linear-gradient(135deg, rgba(8, 18, 36, 0.98), rgba(17, 46, 90, 0.98));
-      color: #ffffff;
-      border-radius: 18px;
-      padding: 14px 16px 12px;
-      box-shadow: 0 20px 50px rgba(7, 14, 28, 0.45);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      align-items: center;
-      gap: 12px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.35s ease, transform 0.35s ease;
-      z-index: 25;
-      overflow: hidden;
-    }
-
-    .welcome-toast.show {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translate(-50%, 0);
-    }
-
-    .welcome-badge {
-      width: 44px;
-      height: 44px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, #f6b24a, #d9771c);
-      display: grid;
-      place-items: center;
-      color: #1c1c1c;
-      font-size: 18px;
-      box-shadow: 0 10px 24px rgba(217, 119, 28, 0.35);
-      padding: 6px;
-    }
-
-    .welcome-badge img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      display: block;
-      border-radius: 10px;
-      background: #fff;
-      padding: 4px;
-    }
-
-    .welcome-text {
-      display: grid;
-      gap: 4px;
-      font-size: 12.8px;
-    }
-
-    .welcome-text strong {
-      font-size: 14.5px;
-      letter-spacing: 0.3px;
-    }
-
-    .welcome-close {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #fff;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .welcome-close:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    .welcome-actions {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .welcome-cta {
-      background: rgba(255, 255, 255, 0.14);
-      border: 1px solid rgba(255, 255, 255, 0.22);
-      color: #fff;
-      border-radius: 999px;
-      padding: 6px 12px;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .welcome-cta:hover {
-      background: rgba(255, 255, 255, 0.22);
-    }
-
-    .welcome-progress {
-      position: absolute;
-      left: 12px;
-      right: 12px;
-      bottom: 8px;
-      height: 3px;
-      border-radius: 999px;
-      background: rgba(255, 255, 255, 0.12);
-      overflow: hidden;
-    }
-
-    .welcome-progress::after {
-      content: "";
-      display: block;
-      height: 100%;
-      width: 100%;
-      transform: translateX(-100%);
-      background: linear-gradient(90deg, #f6b24a, #ffd38a);
-      animation: toastProgress 7s linear forwards;
-    }
-
-    .welcome-toast.show .welcome-progress::after {
-      animation-play-state: running;
-    }
-
-    @keyframes toastProgress {
-      to {
-        transform: translateX(0);
-      }
-    }
-
-    /* APP SHELL */
-    .app-shell {
-      width: min(480px, 100%);
-      min-height: 100vh;
-      margin: 0 auto;
-      background: var(--paper);
-      box-shadow: 0 26px 70px rgba(10, 28, 60, 0.2);
-      border-radius: 26px 26px 0 0;
-      overflow: hidden;
-      transform: translateY(24px);
-      opacity: 0;
-      transition: transform 0.6s ease, opacity 0.6s ease;
-    }
-
-    .app-shell.ready {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    .app-header {
-      padding: 18px 16px 14px;
-      background: linear-gradient(145deg, rgba(11, 42, 87, 0.08), rgba(42, 120, 198, 0.08));
-      border-bottom: 1px solid rgba(14, 26, 43, 0.08);
-      position: sticky;
-      top: 0;
-      z-index: 5;
-      backdrop-filter: blur(8px);
-    }
-
-    .brand-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .brand-logo {
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      background: #ffffff;
-      box-shadow: var(--shadow-soft);
-      padding: 6px;
-    }
-
-    .brand-row h1 {
-      margin: 0;
-      font-family: "Playfair Display", serif;
-      font-size: 24px;
-      letter-spacing: 0.4px;
-    }
-
-    .subtitle {
-      margin: 4px 0 0;
-      font-size: 13.5px;
-      color: #3c4f66;
-    }
-
-    .quick-actions {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-
-    .pill-btn {
-      border: none;
-      padding: 12px 18px;
-      border-radius: 999px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      background: linear-gradient(130deg, var(--gold), var(--amber));
-      color: #fff;
-      box-shadow: 0 10px 22px rgba(224, 123, 29, 0.28);
-    }
-
-    .pill-btn.secondary {
-      background: linear-gradient(130deg, #0f2f61, #1f5aa8);
-      box-shadow: 0 10px 22px rgba(16, 47, 97, 0.28);
-    }
-
-    .pill-btn.ghost {
-      background: transparent;
-      color: var(--ink);
-      border: 1px solid rgba(12, 34, 74, 0.2);
-      box-shadow: none;
-    }
-
-    .pill-btn:hover {
-      transform: translateY(-2px);
-    }
-
-    .pill-btn:active {
-      transform: translateY(0);
-      box-shadow: 0 8px 18px rgba(224, 123, 29, 0.22);
-    }
-
-    .pill-btn:focus-visible,
-    .tab-btn:focus-visible,
-    .nav-btn:focus-visible {
-      outline: 2px solid rgba(246, 178, 74, 0.75);
-      outline-offset: 2px;
-    }
-
-    .app-content {
-      padding: 18px;
-      padding-bottom: 140px;
-      display: flex;
-      flex-direction: column;
-    }
-
-    /* HERO */
-    .hero-card {
-      position: relative;
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      margin-bottom: 18px;
-      background: #0f2f61;
-      color: #fff;
-    }
-
-    .hero-image {
-      height: 220px;
-      overflow: hidden;
-    }
-
-    .hero-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transform: scale(1.05);
-      animation: heroZoom 10s ease-in-out infinite alternate;
-    }
-
-    @keyframes heroZoom {
-      to {
-        transform: scale(1.12);
-      }
-    }
-
-    .hero-body {
-      padding: 16px;
-      background: linear-gradient(0deg, rgba(8, 24, 52, 0.98), rgba(8, 24, 52, 0.2));
-      margin-top: -120px;
-      backdrop-filter: blur(6px);
-    }
-
-    .hero-kicker {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      background: rgba(247, 165, 49, 0.18);
-      color: #ffd38a;
-      border: 1px solid rgba(247, 165, 49, 0.5);
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .hero-body h2 {
-      margin: 0 0 8px;
-      font-family: "Playfair Display", serif;
-      font-size: 25px;
-    }
-
-    .hero-body p {
-      margin: 0 0 12px;
-      font-size: 14.5px;
-      color: #e2ecff;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 12px;
-    }
-
-    .hero-stats {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-    }
-
-    .hero-stat {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      padding: 8px 10px;
-      border-radius: 12px;
-      text-align: center;
-      font-size: 12px;
-    }
-
-    .hero-stat strong {
-      display: block;
-      font-size: 14px;
-      color: #ffd38a;
-    }
-
-    .hero-body h2,
-    .hero-body p,
-    .hero-actions,
-    .hero-stats,
-    .hero-kicker {
-      animation: floatIn 0.7s ease forwards;
-      opacity: 0;
-      transform: translateY(8px);
-    }
-
-    .hero-body h2 { animation-delay: 0.05s; }
-    .hero-body p { animation-delay: 0.12s; }
-    .hero-actions { animation-delay: 0.18s; }
-    .hero-stats { animation-delay: 0.24s; }
-    .hero-kicker { animation-delay: 0s; }
-
-    @keyframes floatIn {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* SECTIONS */
-    .section {
-      margin: 18px 0 22px;
-    }
-
-    .featured-dish {
-      background: linear-gradient(140deg, rgba(11, 42, 87, 0.9), rgba(28, 79, 150, 0.85));
-      border-radius: 20px;
-      padding: 14px;
-      color: #fff;
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 12px;
-      align-items: center;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-    }
-
-    .featured-dish h3 {
-      margin: 0 0 6px;
-      font-size: 18.5px;
-      font-family: "Playfair Display", serif;
-    }
-
-    .featured-dish p {
-      margin: 0 0 10px;
-      font-size: 12.8px;
-      color: #e2ecff;
-    }
-
-    .featured-thumb {
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-
-    .featured-thumb img {
-      width: 100%;
-      height: 130px;
-      object-fit: cover;
-      display: block;
-    }
-
-    .signature-section {
-      order: 999;
-    }
-
-    .section-title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 10px;
-    }
-
-    .section-title h3 {
-      margin: 0;
-      font-family: "Playfair Display", serif;
-      font-size: 21px;
-      letter-spacing: 0.2px;
-    }
-
-    .chip {
-      padding: 6px 10px;
-      border-radius: 999px;
-      background: rgba(28, 79, 150, 0.12);
-      color: var(--azure);
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .tabs {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 8px;
-      margin-bottom: 12px;
-    }
-
-    .tab-btn {
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(12, 34, 74, 0.18);
-      background: #fff;
-      font-weight: 600;
-      font-size: 13px;
-      cursor: pointer;
-    }
-
-    .tab-btn.active {
-      background: rgba(28, 79, 150, 0.12);
-      border-color: rgba(28, 79, 150, 0.35);
-      color: var(--azure);
-    }
-
-    .lang-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 10px;
-      font-size: 12px;
-      color: #9fb1cb;
-    }
-
-    .lang-select {
-      border: 1px solid rgba(233, 238, 247, 0.15);
-      background: #0f1626;
-      color: #e9eef7;
-      border-radius: 12px;
-      padding: 6px 10px;
-      font-size: 12px;
-    }
-
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .notice {
-      background: rgba(247, 165, 49, 0.18);
-      border: 1px solid rgba(247, 165, 49, 0.6);
-      color: #f7a531;
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-      margin-bottom: 10px;
-      display: none;
-    }
-
-    .notice.show {
-      display: block;
-    }
-
-    .menu-card {
-      background: var(--paper);
-      border-radius: 18px;
-      overflow: hidden;
-      box-shadow: var(--shadow-soft);
-      border: 1px solid rgba(14, 26, 43, 0.04);
-      animation: cardPop 0.6s ease forwards;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .menu-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 30px rgba(16, 34, 43, 0.12);
-    }
-
-    @keyframes cardPop {
-      from {
-        transform: translateY(12px);
-        opacity: 0;
-      }
-      to {
-        transform: translateY(0);
-        opacity: 1;
-      }
-    }
-
-    .menu-thumb {
-      height: 110px;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .menu-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-
-    .menu-card:hover .menu-thumb img {
-      transform: scale(1.05);
-    }
-
-    .menu-body {
-      padding: 10px;
-    }
-
-    .menu-body h4 {
-      margin: 0 0 6px;
-      font-size: 14.5px;
-    }
-
-    .menu-body p {
-      margin: 0 0 8px;
-      font-size: 12.5px;
-      color: #3f546b;
-      min-height: 30px;
-    }
-
-    .menu-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-    }
-
-    .category-row {
-      grid-column: 1 / -1;
-      background: rgba(28, 79, 150, 0.08);
-      border: 1px solid rgba(28, 79, 150, 0.18);
-      color: var(--azure);
-      border-radius: 14px;
-      padding: 8px 12px;
-      font-weight: 700;
-      font-size: 13px;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-    }
-
-    .menu-body .lang-select {
-      width: 100%;
-      margin-top: 8px;
-      border-radius: 12px;
-      border: 1px solid rgba(12, 34, 74, 0.18);
-      padding: 8px 10px;
-      font-size: 12px;
-      background: #fff;
-      color: var(--ink);
-    }
-
-    .price {
-      font-weight: 700;
-      color: var(--amber);
-      font-size: 13px;
-    }
-
-    .badge {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      padding: 4px 6px;
-      border-radius: 8px;
-      background: rgba(247, 165, 49, 0.92);
-      color: #1c1c1c;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-
-    .summary {
-      display: grid;
-      gap: 6px;
-      font-size: 13px;
-      margin-top: 8px;
-    }
-
-    .summary-row {
-      display: flex;
-      justify-content: space-between;
-      font-weight: 600;
-    }
-
-    /* ORDER FORM */
-    .order-card {
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: var(--shadow);
-      border: 1px solid rgba(14, 26, 43, 0.05);
-    }
-
-    .note-pay {
-      margin-top: 10px;
-      font-size: 12px;
-      color: #3f546b;
-      background: rgba(28, 79, 150, 0.08);
-      border-radius: 12px;
-      padding: 10px;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-      margin-bottom: 10px;
-    }
-
-    .field label {
-      font-size: 13px;
-      font-weight: 600;
-      color: #42556b;
-    }
-
-    .field input,
-    .field textarea,
-    .field select {
-      border: 1px solid rgba(14, 26, 43, 0.15);
-      border-radius: 12px;
-      padding: 10px 12px;
-      font-family: inherit;
-      font-size: 14px;
-      background: #fff;
-    }
-
-    .field textarea {
-      min-height: 70px;
-      resize: vertical;
-    }
-
-    .check-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      font-size: 12px;
-      color: #b7c3d9;
-      margin-bottom: 10px;
-    }
-
-    .check-grid label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: rgba(28, 79, 150, 0.08);
-      padding: 8px 10px;
-      border-radius: 10px;
-    }
-
-    .pay-row {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      margin-top: 10px;
-    }
-
-    .pay-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      padding: 10px;
-      border-radius: 12px;
-      background: #141d2f;
-      border: 1px solid rgba(233, 238, 247, 0.08);
-      color: #e9eef7;
-      font-size: 12px;
-      font-weight: 600;
-    }
-
-    .time-row {
-      display: none;
-    }
-
-    .time-row.show {
-      display: block;
-    }
-
-    /* TI AK TI AK */
-    .tiak-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .tiak-card {
-      background: linear-gradient(160deg, rgba(28, 79, 150, 0.12), rgba(247, 165, 49, 0.08));
-      border-radius: 16px;
-      padding: 12px;
-      border: 1px solid rgba(14, 26, 43, 0.05);
-    }
-
-    .tiak-card strong {
-      display: block;
-      font-size: 14px;
-      margin-bottom: 6px;
-    }
-
-    .tiak-card span {
-      font-size: 13px;
-      color: #42556b;
-    }
-
-    /* REVIEWS */
-    .review-card {
-      background: var(--mist);
-      border-radius: 14px;
-      padding: 12px;
-      border: 1px solid rgba(14, 26, 43, 0.05);
-      font-size: 13px;
-      color: #3f546b;
-      box-shadow: 0 8px 18px rgba(9, 24, 52, 0.08);
-    }
-
-    .commit-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 10px;
-    }
-
-    .commit-card {
-      background: #ffffff;
-      border-radius: 16px;
-      padding: 12px;
-      border: 1px solid rgba(14, 26, 43, 0.08);
-      box-shadow: var(--shadow-soft);
-      display: grid;
-      gap: 6px;
-      font-size: 13px;
-      color: #3f546b;
-    }
-
-    .commit-card i {
-      color: var(--amber);
-      font-size: 16px;
-    }
-
-    .review-grid {
-      display: grid;
-      gap: 12px;
-    }
-
-    .review-card-pro {
-      background: #fff;
-      border-radius: 16px;
-      padding: 14px;
-      border: 1px solid rgba(14, 26, 43, 0.08);
-      box-shadow: var(--shadow-soft);
-      display: grid;
-      gap: 10px;
-    }
-
-    .fade-up {
-      animation: fadeUp 0.7s ease forwards;
-      opacity: 0;
-      transform: translateY(10px);
-    }
-
-    .fade-up.delay-1 { animation-delay: 0.1s; }
-    .fade-up.delay-2 { animation-delay: 0.2s; }
-
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .review-head {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-
-    .reviewer {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #0f2f61, #f7a531);
-      display: grid;
-      place-items: center;
-      color: #fff;
-      font-weight: 700;
-      font-size: 13px;
-    }
-
-    .review-stars {
-      color: #f7a531;
-      font-size: 12px;
-      letter-spacing: 1px;
-    }
-
-    .review-text {
-      margin: 0;
-      font-size: 12.8px;
-      color: #3f546b;
-    }
-
-    .review-card strong {
-      display: block;
-      margin-bottom: 4px;
-      color: #1f324a;
-    }
-
-    .faq-list {
-      display: grid;
-      gap: 10px;
-    }
-
-    .faq-item {
-      background: #ffffff;
-      border-radius: 14px;
-      border: 1px solid rgba(14, 26, 43, 0.08);
-      box-shadow: var(--shadow-soft);
-      padding: 12px 14px;
-      font-size: 13px;
-      color: #3f546b;
-    }
-
-    .faq-item strong {
-      display: block;
-      color: #1f324a;
-      margin-bottom: 6px;
-    }
-
-    .bestseller-grid {
-      display: grid;
-      gap: 12px;
-    }
-
-    .bestseller-card {
-      display: grid;
-      grid-template-columns: 86px 1fr;
-      gap: 12px;
-      align-items: center;
-      padding: 12px;
-      border-radius: 16px;
-      background: #ffffff;
-      border: 1px solid rgba(14, 26, 43, 0.08);
-      box-shadow: var(--shadow-soft);
-    }
-
-    .bestseller-thumb {
-      width: 86px;
-      height: 86px;
-      border-radius: 14px;
-      overflow: hidden;
-      border: 1px solid rgba(14, 26, 43, 0.08);
-    }
-
-    .bestseller-thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .bestseller-card h4 {
-      margin: 0 0 4px;
-      font-size: 14px;
-    }
-
-    .bestseller-card p {
-      margin: 0 0 6px;
-      font-size: 12.5px;
-      color: #3f546b;
-    }
-
-    .contact-pro {
-      background: linear-gradient(145deg, rgba(11, 42, 87, 0.1), rgba(42, 120, 198, 0.08));
-      border: 1px solid rgba(14, 26, 43, 0.08);
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: var(--shadow-soft);
-    }
-
-    .contact-pro .contact-grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .contact-pro .teranga-link {
-      border-radius: 14px;
-      font-weight: 600;
-      font-size: 0.85em;
-    }
-
-    .pdf-card {
-      background: #ffffff;
-      border-radius: 18px;
-      padding: 14px;
-      border: 1px solid rgba(14, 26, 43, 0.08);
-      box-shadow: var(--shadow-soft);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .pdf-meta {
-      display: grid;
-      gap: 6px;
-      font-size: 13px;
-      color: #3f546b;
-    }
-
-    .pdf-meta strong {
-      color: #1f324a;
-    }
-
-    /* MAP */
-    .map-frame {
-      width: 100%;
-      height: 180px;
-      border: none;
-      border-radius: 16px;
-      overflow: hidden;
-    }
-
-    /* BOTTOM NAV */
-    .bottom-nav {
-      position: fixed;
-      left: 50%;
-      transform: translateX(-50%);
-      bottom: 10px;
-      width: min(420px, calc(100% - 24px));
-      background: #0b2a57;
-      border-radius: 22px;
-      padding: 10px 12px;
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      box-shadow: 0 12px 30px rgba(9, 24, 52, 0.25);
-      z-index: 8;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-    }
-
-    .nav-btn {
-      flex: 1;
-      text-align: center;
-      color: #fff;
-      font-size: 13px;
-      padding: 8px 10px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.08);
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      transition: background 0.2s ease, transform 0.2s ease;
-    }
-
-    .nav-btn:hover {
-      background: rgba(255, 255, 255, 0.16);
-      transform: translateY(-1px);
-    }
-
-    /* REVIEW MODAL */
-    #reviewModal {
-      position: fixed;
-      inset: 0;
-      background: rgba(9, 18, 34, 0.5);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 30;
-      padding: 18px;
-    }
-
-    #reviewModal.open {
-      display: flex;
-    }
-
-    .review-sheet {
-      width: min(420px, 100%);
-      background: #fff;
-      border-radius: 20px;
-      padding: 16px;
-      box-shadow: 0 20px 50px rgba(10, 20, 40, 0.25);
-      animation: cardPop 0.4s ease forwards;
-    }
-
-    .review-list {
-      display: grid;
-      gap: 8px;
-      margin: 10px 0;
-      font-size: 13px;
-      color: #3f546b;
-    }
-
-    .review-list span {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    /* SIGNATURE */
-    .teranga-signature {
-      background: linear-gradient(135deg, #0a0f0f, #141c1c);
-      border: 2px solid #f7a531;
-      border-radius: 18px 40px 18px 40px;
-      padding: 20px 16px;
-      margin: 16px 0;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-    }
-
-    .teranga-signature::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 10px,
-        rgba(255, 215, 0, 0.03) 10px,
-        rgba(255, 215, 0, 0.03) 20px
-      );
-      animation: moveStripes 20s linear infinite;
-    }
-
-    @keyframes moveStripes {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .teranga-header {
-      text-align: center;
-      margin-bottom: 16px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .welcome {
-      background: #f7a531;
-      color: #000;
-      padding: 5px 16px;
-      border-radius: 30px;
-      font-size: 0.8em;
-      font-weight: bold;
-      letter-spacing: 2px;
-      display: inline-block;
-    }
-
-    .kente-pattern {
-      height: 10px;
-      background: repeating-linear-gradient(
-        90deg,
-        #f7a531,
-        #f7a531 10px,
-        #00853F 10px,
-        #00853F 20px,
-        #FDEF42 20px,
-        #FDEF42 30px,
-        #E2231A 30px,
-        #E2231A 40px
-      );
-      border-radius: 10px;
-      margin: 10px 0 18px;
-    }
-
-    .teranga-content {
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
-
-    .teranga-content h2 {
-      font-size: 1.4em;
-      margin: 8px 0 4px;
-      color: white;
-    }
-
-    .teranga-content .spec {
-      color: #f7a531;
-      text-shadow: 0 0 10px rgba(247, 165, 49, 0.6);
-      font-style: italic;
-    }
-
-    .teranga-content .title {
-      color: rgba(255, 215, 0, 0.8);
-      letter-spacing: 2px;
-      margin-bottom: 12px;
-      font-size: 0.8em;
-    }
-
-    .local-flavor {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin: 16px 0;
-    }
-
-    .local-flavor span {
-      background: rgba(255, 215, 0, 0.1);
-      border: 1px solid #f7a531;
-      padding: 6px 12px;
-      border-radius: 50px;
-      font-size: 0.75em;
-      color: #f7a531;
-      transition: all 0.3s;
-    }
-
-    .local-flavor span:hover {
-      background: #f7a531;
-      color: #000;
-      transform: scale(1.05);
-    }
-
-    .teranga-message {
-      text-align: center;
-      margin: 16px 0;
-      padding: 10px;
-      background: rgba(255, 215, 0, 0.05);
-      border-radius: 50px;
-      font-size: 0.95em;
-      border: 1px dashed #f7a531;
-    }
-
-    .message-text {
-      color: white;
-      font-style: italic;
-    }
-
-    .teranga-contact {
-      margin: 18px 0;
-      position: relative;
-      z-index: 1;
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 10px;
-    }
-
-    .teranga-link {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      text-decoration: none;
-      color: white;
-      transition: all 0.3s;
-      border: 2px solid transparent;
-      font-size: 0.8em;
-      justify-content: center;
-    }
-
-    .teranga-link.wa { background: #25D366; }
-    .teranga-link.gh { background: #333; border-color: #f7a531; }
-    .teranga-link.tk { background: #000; border-color: #ff0050; }
-    .teranga-link.em { background: #EA4335; }
-
-    .teranga-link:hover {
-      transform: translateY(-4px) scale(1.02);
-      filter: brightness(1.1);
-      border-color: #f7a531;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-    }
-
-    .teranga-footer {
-      text-align: center;
-      margin-top: 16px;
-      padding-top: 16px;
-      border-top: 2px solid #f7a531;
-    }
-
-    .made-in-senegal {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 4px;
-      flex-wrap: wrap;
-    }
-
-    .flag {
-      font-size: 1.2em;
-      animation: wave 2s infinite;
-    }
-
-    .text {
-      background: linear-gradient(45deg, #00853F, #FDEF42, #E2231A);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      font-weight: bold;
-      font-size: 0.95em;
-    }
-
-    .small-text {
-      color: rgba(255, 215, 0, 0.6);
-      font-size: 0.75em;
-      margin: 5px 0 0;
-    }
-
-    @keyframes wave {
-      0%, 100% { transform: rotate(0deg); }
-      25% { transform: rotate(10deg); }
-      75% { transform: rotate(-10deg); }
-    }
-
-    /* CAROUSEL */
-    .carousel {
-      position: relative;
-      overflow: hidden;
-      border-radius: 16px;
-      background: #0f2f61;
-      box-shadow: var(--shadow);
-    }
-
-    .carousel-track {
-      display: flex;
-      transition: transform 0.5s ease;
-    }
-
-    .carousel-slide {
-      min-width: 100%;
-      position: relative;
-      color: #fff;
-    }
-
-    .carousel-slide img {
-      width: 100%;
-      height: 180px;
-      object-fit: cover;
-      opacity: 0.9;
-    }
-
-    .carousel-caption {
-      position: absolute;
-      bottom: 10px;
-      left: 10px;
-      right: 10px;
-      background: rgba(11, 42, 87, 0.75);
-      padding: 8px 10px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .carousel-dots {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      margin-top: 8px;
-    }
-
-    .dot-btn {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      border: none;
-      background: rgba(28, 79, 150, 0.25);
-      cursor: pointer;
-    }
-
-    .dot-btn.active {
-      background: var(--amber);
-    }
-
-    @media (min-width: 900px) {
-      body {
-        padding: 24px 0;
-      }
-      .app-shell {
-        border-radius: 26px;
-      }
-    }
-
-    /* DARK MODE */
-    body {
-      background: radial-gradient(circle at top left, #101726 0%, #0b101b 55%, #070b14 100%);
-      color: #e9eef7;
-    }
-
-    .app-shell {
-      background: #0f1626;
-      box-shadow: 0 22px 60px rgba(0, 0, 0, 0.45);
-    }
-
-    .app-header {
-      background: linear-gradient(145deg, rgba(28, 79, 150, 0.15), rgba(11, 42, 87, 0.25));
-      border-bottom: 1px solid rgba(233, 238, 247, 0.08);
-    }
-
-    .subtitle,
-    .menu-body p,
-    .review-card,
-    .tiak-card span,
-    .note-pay,
-    .field label,
-    .summary,
-    .review-list,
-    .menu-card,
-    .order-card,
-    .review-card,
-    .review-card-pro,
-    .commit-card {
-      background: #141d2f;
-      border-color: rgba(233, 238, 247, 0.06);
-    }
-
-    .tiak-card {
-      background: linear-gradient(160deg, rgba(28, 79, 150, 0.25), rgba(247, 165, 49, 0.15));
-      border-color: rgba(233, 238, 247, 0.08);
-    }
-
-      .tab-btn,
-      .field input,
-      .field textarea,
-      .field select,
-      .lang-select,
-      .menu-body .lang-select {
-        background: #0f1626;
-        color: #e9eef7;
-        border-color: rgba(233, 238, 247, 0.15);
-      }
-
-    .chip {
-      background: rgba(42, 120, 198, 0.25);
-      color: #c8d9f2;
-    }
-
-    .bottom-nav {
-      background: #0b1222;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
-    }
-
-    .nav-btn {
-      background: rgba(255, 255, 255, 0.12);
-    }
-
-      .review-sheet {
-        background: #141d2f;
-        color: #e9eef7;
-      }
-
-      .review-text {
-        color: #b7c3d9;
-      }
-
-      .commit-card {
-        color: #b7c3d9;
-      }
-
-      .commit-card strong {
-        color: #e9eef7;
-      }
-
-      .faq-item,
-      .bestseller-card,
-      .contact-pro,
-      .pdf-card {
-        background: #141d2f;
-        border-color: rgba(233, 238, 247, 0.06);
-      }
-
-      .faq-item strong,
-      .bestseller-card h4,
-      .pdf-meta strong {
-        color: #e9eef7;
-      }
-
-      .faq-item,
-      .bestseller-card p,
-      .pdf-meta {
-        color: #b7c3d9;
-      }
-
-      .notice {
-        background: rgba(247, 165, 49, 0.15);
-        color: #ffd38a;
-      }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Site à vendre | Domaine disponible</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, 'Inter', sans-serif;
+            background: linear-gradient(145deg, #f6f9fc 0%, #eef2f5 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        /* motif de fond subtil */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle at 20% 40%, rgba(0, 100, 100, 0.02) 2%, transparent 2.5%),
+                              radial-gradient(circle at 75% 85%, rgba(0, 80, 80, 0.02) 1.8%, transparent 2%);
+            background-size: 48px 48px, 32px 32px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .card {
+            max-width: 680px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(0px);
+            border-radius: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 4px 12px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.2s ease;
+            position: relative;
+            z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .card:hover {
+            transform: scale(1.01);
+        }
+
+        .badge-ribbon {
+            background: #e11d48;
+            color: white;
+            font-weight: 700;
+            font-size: 0.9rem;
+            padding: 0.5rem 1.8rem;
+            text-align: center;
+            letter-spacing: 1px;
+            display: inline-block;
+            transform: rotate(-3deg) translateX(-12px);
+            margin-top: 1.2rem;
+            margin-left: -1rem;
+            border-radius: 40px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .content {
+            padding: 2rem 2rem 2.5rem;
+        }
+
+        h1 {
+            font-size: 2.6rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #0B2B26, #1E5A5A);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin: 0.5rem 0 0.5rem 0;
+            letter-spacing: -0.02em;
+        }
+
+        .sub {
+            font-size: 1.2rem;
+            color: #2c5a5a;
+            border-left: 4px solid #2b8c6e;
+            padding-left: 1rem;
+            margin: 1rem 0 1.6rem 0;
+            font-weight: 500;
+            background: #eef6f3;
+            border-radius: 0 20px 20px 0;
+        }
+
+        .price-tag {
+            background: #fef9e3;
+            display: inline-block;
+            padding: 0.5rem 1.4rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #b45309;
+            margin-bottom: 1.5rem;
+            border: 1px dashed #f1c40f;
+        }
+
+        .contact-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0 2rem 0;
+        }
+
+        .btn {
+            flex: 1 1 auto;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            padding: 0.9rem 1.2rem;
+            border-radius: 60px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+            background: white;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-wa {
+            background: #25D366;
+            color: white;
+            border: none;
+            box-shadow: 0 8px 18px rgba(37, 211, 102, 0.25);
+        }
+
+        .btn-wa:hover {
+            background: #20bd5a;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 25px -10px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-call {
+            background: #1e3a8a;
+            color: white;
+            border: none;
+            box-shadow: 0 8px 18px rgba(30, 58, 138, 0.2);
+        }
+
+        .btn-call:hover {
+            background: #1e2f6e;
+            transform: translateY(-3px);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #1e5a5a;
+            color: #1e5a5a;
+        }
+
+        .btn-outline:hover {
+            background: #eef6f3;
+            border-color: #0f3b3b;
+            transform: translateY(-2px);
+        }
+
+        .form-section {
+            background: #fafdfc;
+            border-radius: 2rem;
+            padding: 1.5rem;
+            margin: 1.2rem 0 0.8rem;
+            border: 1px solid #cbdcd9;
+        }
+
+        .form-section h3 {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: #0a3b3b;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.9rem 1rem;
+            border-radius: 28px;
+            border: 1.5px solid #d4e2df;
+            font-family: inherit;
+            font-size: 0.95rem;
+            transition: 0.2s;
+            background: white;
+            outline: none;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #2b8c6e;
+            box-shadow: 0 0 0 3px rgba(43, 140, 110, 0.2);
+        }
+
+        textarea {
+            border-radius: 28px;
+            resize: vertical;
+        }
+
+        .btn-submit {
+            background: #0f3b3b;
+            color: white;
+            width: 100%;
+            justify-content: center;
+            font-weight: 700;
+            border: none;
+            padding: 0.9rem;
+            font-size: 1rem;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-submit:hover {
+            background: #1e5a5a;
+            transform: translateY(-2px);
+        }
+
+        .note {
+            font-size: 0.75rem;
+            text-align: center;
+            margin-top: 1.2rem;
+            color: #5d7a7a;
+        }
+
+        hr {
+            margin: 1rem 0;
+            border: none;
+            height: 1px;
+            background: linear-gradient(to right, #cbdcd9, transparent);
+        }
+
+        footer {
+            text-align: center;
+            padding: 1rem 2rem 1.5rem;
+            font-size: 0.8rem;
+            color: #6f8f8f;
+            border-top: 1px solid #e2f0ec;
+            background: #ffffffcc;
+        }
+
+        @media (max-width: 550px) {
+            .content {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.9rem;
+            }
+            .btn {
+                padding: 0.7rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div id="splash">
-    <video class="splash-video" autoplay muted loop playsinline>
-      <source src="intro.mp4" type="video/mp4">
-    </video>
-  </div>
-
-  <div class="welcome-toast" id="welcomeToast" role="status" aria-live="polite">
-    <div class="welcome-badge">
-      <img src="logo.png" alt="Logo Lylia Restaurant">
+<div class="card">
+    <div style="padding: 0 1.5rem 0 1.5rem;">
+        <div class="badge-ribbon">
+            ⚡ DOMAINE & SITE À VENDRE ⚡
+        </div>
     </div>
-    <div class="welcome-text">
-      <strong>Bienvenue chez Lylia Restaurant</strong>
-      <span>Teranga, saveurs maison et livraison express. Decouvrez le menu.</span>
-    </div>
-    <div class="welcome-actions">
-      <button class="welcome-cta" type="button" onclick="showMenu()">Voir menu</button>
-      <button class="welcome-close" type="button" onclick="hideWelcome()">Fermer</button>
-    </div>
-    <div class="welcome-progress"></div>
-  </div>
-
-  <div class="app-shell" id="app">
-    <header class="app-header">
-      <div class="brand-row">
-        <img class="brand-logo" src="logo.png" alt="Logo Lylia Restaurant">
-        <div>
-          <h1>Lylia Restaurant</h1>
-          <p class="subtitle" data-i18n="subtitle">Cuisine senegalaise, livraison Tiak Tiak</p>
-        </div>
-      </div>
-      <div class="quick-actions">
-        <button class="pill-btn" type="button" onclick="sendOrder()" data-i18n="order_btn">Commander</button>
-        <a class="pill-btn ghost" href="tel:+221711375861">Appeler</a>
-        <a class="pill-btn secondary" href="https://wa.me/221711375861">WhatsApp</a>
-      </div>
-      <div class="lang-row">
-        <span>Langue</span>
-        <select class="lang-select" id="langSelect" onchange="setLanguage(this.value)">
-          <option value="fr" selected>FR</option>
-          <option value="wo">WO</option>
-          <option value="en">EN</option>
-        </select>
-      </div>
-    </header>
-
-    <main class="app-content">
-      <section class="hero-card" id="homeSection">
-        <div class="hero-image">
-          <img src="In-Side.jpg" alt="Salle du Lylia Restaurant">
-        </div>
-        <div class="hero-body">
-          <span class="hero-kicker">Teranga + Fraicheur</span>
-          <h2 data-i18n="hero_title">Le gout qui donne envie de revenir</h2>
-          <p data-i18n="hero_desc">Des recettes maison, des produits frais et une livraison rapide. Commandez en quelques clics.</p>
-          <div class="hero-actions">
-            <button class="pill-btn" type="button" onclick="showMenu()" data-i18n="menu_btn">Voir le menu</button>
-            <button class="pill-btn ghost" type="button" onclick="scrollToOrder()">Commander maintenant</button>
-          </div>
-          <div class="hero-stats">
-            <div class="hero-stat"><strong>20-35 min</strong>Livraison</div>
-            <div class="hero-stat"><strong>4.8/5</strong>Avis clients</div>
-            <div class="hero-stat"><strong>Menu frais</strong>Tous les jours</div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="featured-dish fade-up">
-          <div>
-            <h3>Plat du jour en priorite</h3>
-            <p>Decouvrez la specialite du jour, preparee le matin et servie chaude.</p>
-            <button class="pill-btn secondary" type="button" onclick="showMenu()">Commander le plat du jour</button>
-          </div>
-          <div class="featured-thumb">
-            <img src="images/menu semaine/Lundi.jpg" alt="Plat du jour">
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="menuSection">
-        <div class="section-title">
-          <h3 data-i18n="menu_title">Nos menus signature</h3>
-          <span class="chip" data-i18n="menu_chip">Frais chaque jour</span>
-        </div>
-        <div class="notice" id="soldNotice">Plat du jour epuis&eacute; - choisissez un autre menu.</div>
-        <div class="quick-actions">
-          <button class="pill-btn ghost" type="button" onclick="toggleSoldOut()">Activer notification</button>
-        </div>
-        <div class="tabs">
-          <button class="tab-btn active" id="tabSemaine" type="button" onclick="setTab('semaine')">Menu semaine</button>
-          <button class="tab-btn" id="tabDiner" type="button" onclick="setTab('diner')">Menu diner</button>
-          <button class="tab-btn" id="tabJus" type="button" onclick="setTab('jus')">Jus</button>
-        </div>
-        <div class="menu-grid" id="menuGrid"></div>
-      </section>
-
-      <section class="section">
-        <div class="section-title">
-          <h3>Menu a telecharger</h3>
-          <span class="chip">JPG</span>
-        </div>
-        <div class="pdf-card">
-          <div class="pdf-meta">
-            <strong>Menu en image</strong>
-            <span>Telechargement rapide au format JPG.</span>
-          </div>
-          <div class="quick-actions" style="margin:0;">
-            <a class="pill-btn" href="MENU.jpg" download="MENU.jpg">Telecharger JPG</a>
-          </div>
-        </div>
-        <a class="menu-card" href="MENU.jpg" download="MENU.jpg" style="margin-top:12px;">
-          <div class="menu-thumb">
-            <img src="MENU.jpg" alt="Apercu du menu">
-          </div>
-          <div class="menu-body">
-            <h4>Apercu du menu (JPG)</h4>
-            <p>Cliquez pour telecharger directement.</p>
-          </div>
-        </a>
-      </section>
-
-      <section class="section">
-        <div class="section-title">
-          <h3>Nos engagements</h3>
-          <span class="chip">Qualite Lylia</span>
-        </div>
-        <div class="commit-grid">
-          <div class="commit-card fade-up delay-1">
-            <i class="fas fa-leaf"></i>
-            <strong>Fraicheur</strong>
-            <span>Produits selectionnes chaque matin.</span>
-          </div>
-          <div class="commit-card fade-up delay-2">
-            <i class="fas fa-shield-heart"></i>
-            <strong>Hygiene</strong>
-            <span>Preparation propre et controlee.</span>
-          </div>
-          <div class="commit-card fade-up delay-1">
-            <i class="fas fa-truck-fast"></i>
-            <strong>Livraison</strong>
-            <span>Rapide et soignee, selon la zone.</span>
-          </div>
-          <div class="commit-card fade-up delay-2">
-            <i class="fas fa-headset"></i>
-            <strong>Service</strong>
-            <span>Equipe disponible et a l'ecoute.</span>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-title">
-          <h3>Plats du jour</h3>
-          <span class="chip">En images</span>
-        </div>
-        <div class="carousel" id="dishCarousel">
-          <div class="carousel-track" id="carouselTrack">
-            <div class="carousel-slide">
-              <img src="images/menu semaine/Lundi.jpg" alt="Plat du lundi">
-              <div class="carousel-caption">Lundi - Plat maison</div>
-            </div>
-            <div class="carousel-slide">
-              <img src="images/menu semaine/mardi.jpg" alt="Plat du mardi">
-              <div class="carousel-caption">Mardi - Special</div>
-            </div>
-            <div class="carousel-slide">
-              <img src="images/menu semaine/mercredi.jpg" alt="Plat du mercredi">
-              <div class="carousel-caption">Mercredi - Tradition</div>
-            </div>
-            <div class="carousel-slide">
-              <img src="images/menu semaine/jeudi.jpg" alt="Plat du jeudi">
-              <div class="carousel-caption">Jeudi - Terroir</div>
-            </div>
-            <div class="carousel-slide">
-              <img src="images/menu semaine/vendredi.jpg" alt="Plat du vendredi">
-              <div class="carousel-caption">Vendredi - Populaire</div>
-            </div>
-            <div class="carousel-slide">
-              <img src="images/menu semaine/samedi.jpg" alt="Plat du samedi">
-              <div class="carousel-caption">Samedi - Festif</div>
-            </div>
-            <div class="carousel-slide">
-              <img src="images/menu semaine/dimanche.jpg" alt="Plat du dimanche">
-              <div class="carousel-caption">Dimanche - Special</div>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-dots" id="carouselDots"></div>
-      </section>
-
-      <section class="section" id="orderSection">
-        <div class="section-title">
-          <h3 data-i18n="order_title">Valider ma commande</h3>
-          <span class="chip" data-i18n="order_chip">Mobile first</span>
-        </div>
-        <div class="order-card">
-          <div class="note-pay">
-            Paiement flexible : sur place ou a la livraison. Wave et Orange Money disponibles.
-          </div>
-          <div class="pay-row">
-            <a class="pay-btn" href="https://wave.com" target="_blank" rel="noopener">Payer avec Wave</a>
-            <a class="pay-btn" href="https://orangemoney.orange.sn" target="_blank" rel="noopener">Orange Money</a>
-          </div>
-          <div class="field">
-            <label for="name">Nom</label>
-            <input id="name" type="text" placeholder="Votre nom complet">
-          </div>
-          <div class="field">
-            <label for="phone">Telephone</label>
-            <input id="phone" type="tel" placeholder="+221 ...">
-          </div>
-          <div class="field">
-            <label for="mode">Mode</label>
-            <select id="mode" onchange="updateMode()">
-              <option value="Livraison">Livraison</option>
-              <option value="A emporter">A emporter</option>
-              <option value="Sur place">Sur place</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="zone">Zone de livraison</label>
-            <select id="zone" onchange="updateDeliveryFee()">
-              <option value="0">Sur place</option>
-              <option value="500">Hann Maristes - 500 FCFA</option>
-              <option value="800">Yoff - 800 FCFA</option>
-              <option value="1000">Plateau - 1000 FCFA</option>
-              <option value="1200">Ouakam - 1200 FCFA</option>
-            </select>
-          </div>
-          <div class="field time-row" id="pickupTimeRow">
-            <label for="pickup">Heure souhaitee</label>
-            <input id="pickup" type="time">
-          </div>
-          <div class="field">
-            <label for="address">Adresse de livraison</label>
-            <input id="address" type="text" placeholder="Quartier, rue, repere">
-          </div>
-          <div class="field">
-            <label>Personnalisation</label>
-            <div class="check-grid">
-              <label><input type="checkbox" id="noChili"> Sans piment</label>
-              <label><input type="checkbox" id="extraSauce"> Extra sauce</label>
-              <label><input type="checkbox" id="noOnion"> Sans oignon</label>
-              <label><input type="checkbox" id="extraSpice"> Tres pimente</label>
-            </div>
-          </div>
-          <div class="field">
-            <label for="notes">Notes</label>
-            <textarea id="notes" placeholder="Sauce a part, sans piment, etc."></textarea>
-          </div>
-          <button class="pill-btn secondary" type="button" onclick="sendOrder()">Valider commande</button>
-        </div>
-      </section>
-
-      <section class="section" id="reservationSection">
-        <div class="section-title">
-          <h3>Reservation de table</h3>
-          <span class="chip">Simple et rapide</span>
-        </div>
-        <div class="order-card">
-          <div class="field">
-            <label for="resName">Nom</label>
-            <input id="resName" type="text" placeholder="Votre nom">
-          </div>
-          <div class="field">
-            <label for="resPhone">Telephone</label>
-            <input id="resPhone" type="tel" placeholder="+221 ...">
-          </div>
-          <div class="field">
-            <label for="resDate">Date</label>
-            <input id="resDate" type="date">
-          </div>
-          <div class="field">
-            <label for="resTime">Heure</label>
-            <input id="resTime" type="time">
-          </div>
-          <div class="field">
-            <label for="resPeople">Nombre de personnes</label>
-            <input id="resPeople" type="number" min="1" max="20" placeholder="2">
-          </div>
-          <button class="pill-btn" type="button" onclick="sendReservation()">Reserver via WhatsApp</button>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-title">
-          <h3>Livraison express</h3>
-          <span class="chip">Equipe Lylia</span>
-        </div>
-        <div class="tiak-grid">
-          <div class="tiak-card">
-            <strong>Rapide</strong>
-            <span>Livraison en temps record selon la zone.</span>
-          </div>
-          <div class="tiak-card">
-            <strong>Soigne</strong>
-            <span>Commande protegee et respect des horaires.</span>
-          </div>
-          <div class="tiak-card">
-            <strong>Disponible</strong>
-            <span>Midi et soir, selon disponibilite.</span>
-          </div>
-          <div class="tiak-card">
-            <strong>Contact direct</strong>
-            <span>Suivi rapide par appel ou WhatsApp.</span>
-          </div>
-        </div>
-        <div class="quick-actions" style="margin-top:12px;">
-          <a class="pill-btn" href="tel:+221711375861">Appeler Tiak Tiak</a>
-          <a class="pill-btn ghost" href="https://wa.me/221711375861">WhatsApp Tiak Tiak</a>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-title">
-          <h3>Ils parlent de nous</h3>
-          <span class="chip">4.8/5</span>
-        </div>
-        <div class="review-grid">
-          <div class="review-card-pro fade-up delay-1">
-            <div class="review-head">
-              <div class="reviewer">
-                <div class="avatar">C</div>
-                <div>
-                  <strong>Coumba</strong><br>
-                  <span class="review-stars">★★★★★</span>
-                </div>
-              </div>
-              <span class="chip">5/5</span>
-            </div>
-            <p class="review-text">Saveurs authentiques, portions genereuses et livraison rapide. J'adore.</p>
-          </div>
-          <div class="review-card-pro fade-up delay-2">
-            <div class="review-head">
-              <div class="reviewer">
-                <div class="avatar">M</div>
-                <div>
-                  <strong>Malick</strong><br>
-                  <span class="review-stars">★★★★☆</span>
-                </div>
-              </div>
-              <span class="chip">4.5/5</span>
-            </div>
-            <p class="review-text">Tres bon yassa, service soigne et commande respectee.</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-title">
-          <h3>Nos best-sellers</h3>
-          <span class="chip">Tres demandes</span>
-        </div>
-        <div class="bestseller-grid">
-          <div class="bestseller-card fade-up delay-1">
-            <div class="bestseller-thumb">
-              <img src="images/menu diner/burger.jpg" alt="Burger">
-            </div>
-            <div>
-              <h4>Burger</h4>
-              <p>Le classique qui fait toujours plaisir.</p>
-              <span class="price">Simple / Double / Maxi</span>
-            </div>
-          </div>
-          <div class="bestseller-card fade-up delay-2">
-            <div class="bestseller-thumb">
-              <img src="images/menu diner/tacos.jpg" alt="Tacos">
-            </div>
-            <div>
-              <h4>Tacos</h4>
-              <p>Grille, sauce maison et bien garni.</p>
-              <span class="price">2 500 FCFA</span>
-            </div>
-          </div>
-          <div class="bestseller-card fade-up delay-1">
-            <div class="bestseller-thumb">
-              <img src="images/menu diner/Chawarma.jpg" alt="Chawarma">
-            </div>
-            <div>
-              <h4>Chawarma</h4>
-              <p>Saveurs relevees et viande tendre.</p>
-              <span class="price">Simple / Double</span>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-title">
-          <h3>Questions frequentes</h3>
-          <span class="chip">FAQ</span>
-        </div>
-        <div class="faq-list">
-          <div class="faq-item">
-            <strong>Comment commander rapidement ?</strong>
-            Cliquez sur “Commander maintenant”, choisissez vos options et confirmez via WhatsApp.
-          </div>
-          <div class="faq-item">
-            <strong>Quels moyens de paiement acceptez-vous ?</strong>
-            Cash, Wave et Orange Money sont acceptes sur place ou a la livraison.
-          </div>
-          <div class="faq-item">
-            <strong>Quel est le delai de livraison ?</strong>
-            En general 20 a 35 minutes selon la zone.
-          </div>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-title">
-          <h3>Commander a nouveau</h3>
-          <span class="chip">En 1 clic</span>
-        </div>
-        <div class="order-card">
-          <p id="lastOrderText" style="font-size:13px;color:#3f546b;margin:0 0 10px;">
-            Aucune commande recente.
-          </p>
-          <button class="pill-btn" type="button" onclick="reorderLast()">Recommander</button>
-        </div>
-      </section>
-
-      <section class="section signature-section">
-        <div class="section-title">
-          <h3>Contact & reseaux</h3>
-          <span class="chip">Equipe</span>
-        </div>
-        <div class="contact-pro">
-          <div class="section-title" style="margin-bottom:8px;">
-            <h3 style="font-size:18px;">Besoin d'un site pro ?</h3>
-            <span class="chip">Disponible</span>
-          </div>
-          <p style="margin:0 0 10px;font-size:13px;color:#3f546b;">
-            Creation de sites vitrines et menus digitaux. Contact rapide par WhatsApp ou appel.
-          </p>
-          <div class="contact-grid">
-            <a href="https://wa.me/221783068748" class="teranga-link wa">
-              <i class="fab fa-whatsapp"></i>
-              <span>78 306 87 48</span>
-            </a>
-            <a href="#" class="teranga-link tk">
-              <i class="fab fa-tiktok"></i>
-              <span>@nextdealagency</span>
-            </a>
-            <a href="mailto:pouyeibrawane@gmail.com" class="teranga-link em">
-              <i class="fas fa-envelope"></i>
-              <span>Khalil Ibrahima</span>
-            </a>
-            <a href="tel:+221783068748" class="teranga-link gh">
-              <i class="fas fa-phone"></i>
-              <span>Appeler</span>
-            </a>
-          </div>
-        </div>
-        <div class="teranga-signature" style="margin-top:16px;">
-          <div class="teranga-header">
-            <span class="welcome">ⵣ DAKAR • SENEGAL ⵣ</span>
-          </div>
-
-          <div class="teranga-main">
-            <div class="kente-pattern"></div>
-
-            <div class="teranga-content">
-              <i class="fas fa-laptop" style="font-size: 2.2em; color: #FFD700; margin-bottom: 8px;"></i>
-              <h2>EL KHALILOU <span class="spec">SPEC</span></h2>
-              <p class="title">✧ DEVELOPPEUR FULL STACK ✧</p>
-
-              <div class="local-flavor">
-                <span><i class="fas fa-coffee"></i> Cafe Touba</span>
-                <span><i class="fas fa-wifi"></i> Code & Thieboudiene</span>
-                <span><i class="fas fa-music"></i> Mbalakh Dev</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="teranga-message">
-            <p class="message-text">
-              <i class="fas fa-heart" style="color: #FFD700;"></i>
-              "Begg naa ci sa xol" - Code avec le coeur
-              <i class="fas fa-heart" style="color: #FFD700;"></i>
-            </p>
-          </div>
-
-          <div class="teranga-contact">
-            <div class="contact-grid">
-              <a href="https://wa.me/221783068748" class="teranga-link wa">
-                <i class="fab fa-whatsapp"></i>
-                <span>78 306 87 48</span>
-              </a>
-              <a href="#" class="teranga-link tk">
-                <i class="fab fa-tiktok"></i>
-                <span>@nextdealagency</span>
-              </a>
-              <a href="mailto:pouyeibrawane@gmail.com" class="teranga-link em">
-                <i class="fas fa-envelope"></i>
-                <span>Khalil Ibrahima</span>
-              </a>
-            </div>
-          </div>
-
-          <div class="teranga-footer">
-            <div class="made-in-senegal">
-              <span class="flag">🇸🇳</span>
-              <span class="text">MADE IN SENEGAL - TERANGA BI</span>
-              <span class="flag">🇸🇳</span>
-            </div>
-            <p class="small-text">Jamm ak jamm • Paix et tranquillite</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" id="infoSection">
-        <div class="section-title">
-          <h3>Infos & horaires</h3>
-          <span class="chip">Ouvert</span>
-        </div>
-        <div class="menu-grid">
-          <div class="review-card">
-            <strong>Horaires</strong>
-            Lun - Ven : 11h30 - 17h30 / 18h30 - 02h00
-          </div>
-          <div class="review-card">
-            <strong>Weekend</strong>
-            Sam - Dim : 12h00 - 03h00
-          </div>
-          <div class="review-card">
-            <strong>Adresse</strong>
-            Dakar, Grand Mbao, en face station MKA
-          </div>
-          <div class="review-card">
-            <strong>Contact</strong>
-            +221 71 137 58 61
-          </div>
-          <div class="review-card">
-            <strong>Temps livraison</strong>
-            20 a 35 minutes selon la zone
-          </div>
-          <div class="review-card">
-            <strong>Paiement</strong>
-            Cash, Wave, Orange Money
-          </div>
-        </div>
-        <div class="section" style="margin-top:12px;">
-          <iframe
-            class="map-frame"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5703.244287957468!2d-17.317368193212705!3d14.73699893855007!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xec1751e314977a1%3A0x29ef0379d143c4df!2zRMOpbMOpZ3XDqSBkZSBxdWFydGllcg!5e1!3m2!1sfr!2ssn!4v1773373508124!5m2!1sfr!2ssn"
-            title="Carte Lylia Restaurant"
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            allowfullscreen>
-          </iframe>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <nav class="bottom-nav">
-    <button class="nav-btn" type="button" onclick="scrollToTop()">Accueil</button>
-    <button class="nav-btn" type="button" onclick="showMenu()">Menu</button>
-    <button class="nav-btn" type="button" onclick="sendOrder()">Commander</button>
-    <button class="nav-btn" type="button" onclick="scrollToInfo()">Infos</button>
-  </nav>
-
-  <div id="reviewModal">
-    <div class="review-sheet">
-      <div class="section-title" style="margin-bottom:6px;">
-        <h3>Resume commande</h3>
-        <span class="chip">Avant WhatsApp</span>
-      </div>
-      <div class="review-list" id="reviewList"></div>
-        <div class="summary">
-          <div class="summary-row">
-            <span>Sous-total</span>
-            <span id="reviewSubTotal">0 FCFA</span>
-          </div>
-          <div class="summary-row">
-            <span>Remise</span>
-            <span id="reviewDiscount">0 FCFA</span>
-          </div>
-          <div class="summary-row">
-            <span>Livraison</span>
-            <span id="reviewDelivery">0 FCFA</span>
-          </div>
-        <div class="summary-row">
-          <span>Total</span>
-          <span id="reviewTotal">0 FCFA</span>
-        </div>
-      </div>
-      <div class="quick-actions" style="margin-top:12px;">
-        <button class="pill-btn ghost" type="button" onclick="closeReview()">Modifier</button>
-        <button class="pill-btn secondary" type="button" onclick="confirmWhatsApp()">Passer sur WhatsApp</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    const app = document.getElementById("app");
-    const menuGrid = document.getElementById("menuGrid");
-    const subTotalEl = document.getElementById("subTotal");
-    const discountRowEl = document.getElementById("discountRow");
-    const deliveryFeeEl = document.getElementById("deliveryFee");
-    const grandTotalEl = document.getElementById("grandTotal");
-    const lastOrderText = document.getElementById("lastOrderText");
-    const carouselTrack = document.getElementById("carouselTrack");
-    const carouselDots = document.getElementById("carouselDots");
-    const soldNotice = document.getElementById("soldNotice");
-    const welcomeToast = document.getElementById("welcomeToast");
-
-    const data = {
-      semaine: [
-        { id: "lundi", name: "Lundi", price: 1500, img: "images/menu semaine/Lundi.jpg", desc: "Plat maison du lundi." },
-        { id: "mardi", name: "Mardi", price: 1500, img: "images/menu semaine/mardi.jpg", desc: "Menu special mardi." },
-        { id: "mercredi", name: "Mercredi", price: 1500, img: "images/menu semaine/mercredi.jpg", desc: "Recette traditionnelle." },
-        { id: "jeudi", name: "Jeudi", price: 1500, img: "images/menu semaine/jeudi.jpg", desc: "Cuisine du terroir." },
-        { id: "vendredi", name: "Vendredi", price: 1500, img: "images/menu semaine/vendredi.jpg", desc: "Plat du vendredi." },
-        { id: "samedi", name: "Samedi", price: 1500, img: "images/menu semaine/samedi.jpg", desc: "Menu festif." },
-        { id: "dimanche", name: "Dimanche", price: 1500, img: "images/menu semaine/dimanche.jpg", desc: "Special dimanche." }
-      ],
-      diner: [
-        { id: "plat_du_jour", name: "Plat du jour", price: 1500, img: "images/menu semaine/Lundi.jpg", desc: "Selon arrivage.", category: "Plats" },
-        { id: "dibi", name: "Dibi", price: 4000, img: "images/menu diner/dibi.jpg", desc: "Brochettes grillees." },
-        { id: "soupe", name: "Soupe poulet", price: 2500, img: "images/menu diner/soupe_poulet.jpg", desc: "Rechauffe et reconfort.", category: "Plats" },
-        { id: "pizza", name: "Pizza", price: 2900, img: "images/menu diner/pizza.jpg", desc: "Fromage et poulet.", category: "Fast-food" },
-        { id: "tacos", name: "Tacos", price: 2500, img: "images/menu diner/tacos.jpg", desc: "Sauce maison.", category: "Fast-food" },
-        {
-          id: "fataya",
-          name: "Fataya",
-          img: "images/menu diner/fataya.jpg",
-          desc: "Snacking rapide.",
-          variants: [
-            { label: "Simple", price: 700 },
-            { label: "Double", price: 1000 }
-          ],
-          category: "Fast-food"
-        },
-        {
-          id: "burger",
-          name: "Burger",
-          img: "images/menu diner/burger.jpg",
-          desc: "Classique.",
-          variants: [
-            { label: "Simple", price: 1500 },
-            { label: "Double", price: 2000 },
-            { label: "Maxi", price: 2500 }
-          ],
-          category: "Fast-food"
-        },
-        {
-          id: "sandwich_v",
-          name: "Sandwich",
-          img: "images/menu diner/sandwich_brochettes.jpg",
-          desc: "Frais et savoureux.",
-          variants: [
-            { label: "Simple", price: 1000 },
-            { label: "Double", price: 1500 }
-          ],
-          category: "Fast-food"
-        },
-        {
-          id: "norvegienne",
-          name: "Norvegienne",
-          img: "images/menu diner/norvegienne.jpg",
-          desc: "Fromage et sauce.",
-          variants: [
-            { label: "Simple", price: 1600 },
-            { label: "Double", price: 2000 }
-          ],
-          category: "Fast-food"
-        },
-        {
-          id: "chawarma",
-          name: "Chawarma",
-          img: "images/menu diner/Chawarma.jpg",
-          desc: "Poulet et sauce.",
-          variants: [
-            { label: "Simple", price: 1600 },
-            { label: "Double", price: 2000 }
-          ],
-          category: "Fast-food"
-        },
-        { id: "crepe_sucre", name: "Crepe sucre", price: 1000, img: "images/menu diner/crepes-sucre.jpg", desc: "Douce et legere.", category: "Desserts" },
-        {
-          id: "crepe_sale",
-          name: "Crepe sale",
-          img: "images/menu diner/crepes-salees.jpg",
-          desc: "Fromage et garniture.",
-          variants: [
-            { label: "Simple", price: 1500 },
-            { label: "Double", price: 2000 },
-            { label: "Maxi", price: 2500 }
-          ],
-          category: "Desserts"
-        },
-        { id: "box_sucre_sale", name: "Box sucre et sale", price: 1000, img: "images/menu diner/box sucree et salee.jpg", desc: "A partir de 1000.", category: "Snacks" },
-        {
-          id: "cake",
-          name: "Cake",
-          img: "images/menu diner/cakes.jpg",
-          desc: "Fait maison.",
-          variants: [
-            { label: "Classique", price: 600 },
-            { label: "Chocolat", price: 800 }
-          ],
-          category: "Desserts"
-        },
-        { id: "nems", name: "Nems", price: 300, img: "images/menu diner/nems.jpg", desc: "Croustillants.", category: "Snacks" },
-        {
-          id: "beignets",
-          name: "Beignets",
-          img: "images/menu diner/beignets.jpg",
-          desc: "Moelleux.",
-          variants: [
-            { label: "Classique", price: 200 },
-            { label: "Choco", price: 300 }
-          ],
-          category: "Desserts"
-        }
-      ],
-      jus: [
-        { id: "bissap", name: "Bissap", price: 800, img: "images/jus/bissap.jpg", desc: "Jus naturel frais.", category: "Boissons" },
-        { id: "bouye", name: "Bouye", price: 900, img: "images/jus/bouye.jpg", desc: "Cremeux et doux.", category: "Boissons" },
-        { id: "citron", name: "Citron", price: 700, img: "images/jus/citron.jpg", desc: "Frais et acidule.", category: "Boissons" },
-        { id: "coctail", name: "Cocktail", price: 1200, img: "images/jus/coctail.jpg", desc: "Mix de fruits.", category: "Boissons" },
-        { id: "ditakh", name: "Ditakh", price: 1300, img: "images/jus/ditakh.jpg", desc: "Saveur locale.", category: "Boissons" },
-        { id: "moringa", name: "Moringa", price: 1000, img: "images/jus/moringua.jpg", desc: "Energie naturelle.", category: "Boissons" },
-        { id: "canette", name: "Canette", price: 500, img: "images/jus/canettes.jpg", desc: "Boisson fraiche.", category: "Boissons" },
+    <div class="content">
+        <h1>Ce site est<br>disponible à l'achat</h1>
+        <div class="sub">Projet prêt à être transféré – reprenez le code ou l'intégralité du site</div>
         
-      ]
-    };
-
-    const cart = {};
-    const hour = new Date().getHours();
-    const isEvening = hour >= 18;
-    let currentTab = isEvening ? "diner" : "semaine";
-    let deliveryFee = 0;
-    let discountPercent = 0;
-    let carouselIndex = 0;
-    let carouselTimer = null;
-    let soldOutToday = false;
-
-    setTimeout(() => {
-      app.classList.add("ready");
-    }, 900);
-
-    function showWelcome() {
-      if (!welcomeToast) return;
-      welcomeToast.classList.add("show");
-      setTimeout(() => {
-        hideWelcome();
-      }, 7000);
-    }
-
-    function hideWelcome() {
-      if (!welcomeToast) return;
-      welcomeToast.classList.remove("show");
-    }
-
-    function renderMenu() {
-      menuGrid.innerHTML = "";
-      const items = getOrderedItems();
-      let lastCategory = "";
-      items.forEach((item, index) => {
-        const isToday = currentTab === "semaine" && item.id === getTodayKey();
-        const isSoldOut = isToday && soldOutToday;
-        const hasVariants = Array.isArray(item.variants) && item.variants.length;
-        const initialPrice = hasVariants ? item.variants[0].price : item.price;
-        const category = item.category || "";
-        if (category && category !== lastCategory) {
-          const categoryRow = document.createElement("div");
-          categoryRow.className = "category-row";
-          categoryRow.textContent = category;
-          menuGrid.appendChild(categoryRow);
-          lastCategory = category;
-        }
-        const card = document.createElement("div");
-        card.className = "menu-card";
-        card.innerHTML = `
-          <div class="menu-thumb">
-            ${isSoldOut ? '<span class="badge">Epuis&eacute;</span>' : isToday ? '<span class="badge">Aujourd&apos;hui</span>' : index === 0 ? '<span class="badge">Top</span>' : ''}
-            <img src="${encodeURI(item.img)}" alt="${item.name}">
-          </div>
-          <div class="menu-body">
-            <h4>${item.name}</h4>
-            <p>${item.desc}</p>
-            <div class="menu-footer">
-              <span class="price" id="price-${item.id}">${formatFCFA(initialPrice)}</span>
-              <button class="pill-btn ${isSoldOut ? 'ghost' : ''}" type="button" onclick="addToCart('${item.id}')" ${isSoldOut ? 'disabled' : ''}>${isSoldOut ? 'Indisponible' : 'Ajouter'}</button>
+        <div class="price-tag">
+            💰 Offre sérieuse | Prix à discuter
+        </div>
+        
+        <p style="margin-bottom: 1rem; color: #2d4a4a;">📌 Site complet + hébergement transférable. Contactez-moi directement pour finaliser la transaction et obtenir tous les accès.</p>
+        
+        <!-- Boutons de contact principaux : WhatsApp et Appel -->
+        <div class="contact-buttons">
+            <a href="#" id="whatsappLink" class="btn btn-wa" target="_blank">
+                💬 WhatsApp &nbsp;→
+            </a>
+            <a href="tel:+221783068748" class="btn btn-call">
+                📞 M'appeler
+            </a>
+        </div>
+        
+        <!-- Formulaire de contact simple : le client nous donne ses infos -->
+        <div class="form-section">
+            <h3>📋 Envoyez-moi un message</h3>
+            <p style="font-size: 0.85rem; margin-bottom: 1rem; color: #466b6b;">Remplissez ce formulaire, je vous recontacte rapidement (WhatsApp ou appel).</p>
+            <form id="contactForm">
+                <div class="form-group">
+                    <input type="text" id="name" placeholder="Votre nom / société" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" id="phone" placeholder="Votre téléphone (optionnel mais recommandé)">
+                </div>
+                <div class="form-group">
+                    <textarea id="message" rows="3" placeholder="Votre message, offre ou question concernant le site..."></textarea>
+                </div>
+                <button type="submit" class="btn-submit">
+                    ✉️ Envoyer la demande
+                </button>
+                <div class="note" style="margin-top: 12px;">📩 Votre message sera préparé et m’enverra une notification par WhatsApp (message pré-rempli). Vous pouvez aussi m'appeler directement.</div>
+            </form>
+        </div>
+        
+        <hr>
+        <div style="display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap; margin-top: 0.5rem;">
+            <div style="display: flex; align-items: center; gap: 6px; background: #f0f7f5; padding: 0.3rem 1rem; border-radius: 60px;">
+                📍 Numéro vendeur : <strong>78 306 87 48</strong>
             </div>
-            ${hasVariants ? `
-              <select class="lang-select" id="opt-${item.id}" onchange="updateVariantPrice('${item.id}')">
-                ${item.variants.map((variant, vIndex) => `<option value="${vIndex}">${variant.label} - ${formatFCFA(variant.price)}</option>`).join("")}
-              </select>
-            ` : ""}
-          </div>
-        `;
-        menuGrid.appendChild(card);
-      });
-    }
+        </div>
+    </div>
+    <footer>
+        🌐 Site prêt à être déployé • Code & base de données inclus • Transfert simplifié
+    </footer>
+</div>
 
-    function setTab(tab) {
-      if (isEvening && tab === "semaine") {
-        return;
-      }
-      currentTab = tab;
-      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
-      const activeBtn = document.querySelector(`.tab-btn[onclick="setTab('${tab}')"]`);
-      if (activeBtn) activeBtn.classList.add("active");
-      renderMenu();
-    }
-
-    function getTodayKey() {
-      const day = new Date().getDay();
-      const map = ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"];
-      return map[day];
-    }
-
-    function getOrderedItems() {
-      if (currentTab !== "semaine") return data[currentTab];
-      const todayKey = getTodayKey();
-      return data.semaine.filter(item => item.id === todayKey);
-    }
-
-    function addToCart(id) {
-      const item = findItemById(id);
-      if (!item) return;
-      const optionIndex = getSelectedOptionIndex(item);
-      const key = optionIndex !== null ? `${id}|${optionIndex}` : id;
-      if (!cart[key]) {
-        cart[key] = { id, optionIndex, qty: 0 };
-      }
-      cart[key].qty += 1;
-      renderCart();
-    }
-
-    function renderCart() {
-      let subtotal = 0;
-      Object.keys(cart).forEach(key => {
-        const entry = cart[key];
-        const item = findItemById(entry.id);
-        if (!item) return;
-        const qty = entry.qty;
-        const price = getItemPrice(item, entry.optionIndex);
-        subtotal += price * qty;
-      });
-      updateTotals(subtotal);
-    }
-
-    function updateTotals(subtotal) {
-      const discount = Math.round(subtotal * (discountPercent / 100));
-      const total = Math.max(0, subtotal - discount + deliveryFee);
-      if (subTotalEl) subTotalEl.textContent = formatFCFA(subtotal);
-      if (discountRowEl) discountRowEl.textContent = formatFCFA(discount);
-      if (deliveryFeeEl) deliveryFeeEl.textContent = formatFCFA(deliveryFee);
-      if (grandTotalEl) grandTotalEl.textContent = formatFCFA(total);
-    }
-
-    function updateDeliveryFee() {
-      const zone = document.getElementById("zone");
-      deliveryFee = parseInt(zone.value, 10) || 0;
-      const subtotal = getSubtotal();
-      updateTotals(subtotal);
-    }
-
-    function updateMode() {
-      const mode = document.getElementById("mode").value;
-      const zone = document.getElementById("zone");
-      const pickupRow = document.getElementById("pickupTimeRow");
-      if (mode === "Livraison") {
-        zone.disabled = false;
-        pickupRow.classList.remove("show");
-      } else {
-        zone.value = "0";
-        zone.disabled = true;
-        deliveryFee = 0;
-        pickupRow.classList.add("show");
-      }
-      updateTotals(getSubtotal());
-    }
-
-    function getSubtotal() {
-      let subtotal = 0;
-      Object.keys(cart).forEach(key => {
-        const entry = cart[key];
-        const item = findItemById(entry.id);
-        if (item) subtotal += getItemPrice(item, entry.optionIndex) * entry.qty;
-      });
-      return subtotal;
-    }
-
-    function findItemById(id) {
-      return [...data.semaine, ...data.diner, ...data.jus].find(item => item.id === id);
-    }
-
-    function formatFCFA(amount) {
-      return amount.toLocaleString("fr-FR") + " FCFA";
-    }
-
-    function updateVariantPrice(id) {
-      const item = findItemById(id);
-      if (!item || !item.variants) return;
-      const selectEl = document.getElementById(`opt-${id}`);
-      if (!selectEl) return;
-      const optionIndex = parseInt(selectEl.value, 10) || 0;
-      const priceEl = document.getElementById(`price-${id}`);
-      if (priceEl) priceEl.textContent = formatFCFA(getItemPrice(item, optionIndex));
-    }
-
-    function getSelectedOptionIndex(item) {
-      if (!item || !Array.isArray(item.variants) || !item.variants.length) return null;
-      const selectEl = document.getElementById(`opt-${item.id}`);
-      if (!selectEl) return 0;
-      const optionIndex = parseInt(selectEl.value, 10);
-      return Number.isNaN(optionIndex) ? 0 : optionIndex;
-    }
-
-    function getItemPrice(item, optionIndex) {
-      if (!item.variants || optionIndex === null) return item.price;
-      const variant = item.variants[optionIndex] || item.variants[0];
-      return variant.price;
-    }
-
-    function getItemLabel(item, optionIndex) {
-      if (!item.variants || optionIndex === null) return item.name;
-      const variant = item.variants[optionIndex] || item.variants[0];
-      return `${item.name} - ${variant.label}`;
-    }
-
-    function sendOrder() {
-      if (!Object.keys(cart).length) {
-        alert("Votre panier est vide. Ajoutez un article avant de commander.");
-        return;
-      }
-      openReview();
-    }
-
-    function openReview() {
-      const reviewList = document.getElementById("reviewList");
-      const subtotal = getSubtotal();
-      const discount = Math.round(subtotal * (discountPercent / 100));
-      const total = Math.max(0, subtotal - discount + deliveryFee);
-      reviewList.innerHTML = Object.keys(cart).map(id => {
-        const entry = cart[id];
-        const item = findItemById(entry.id);
-        const qty = entry.qty;
-        const price = item ? getItemPrice(item, entry.optionIndex) : 0;
-        return item ? `<span><strong>${getItemLabel(item, entry.optionIndex)} x${qty}</strong><span>${formatFCFA(price * qty)}</span></span>` : "";
-      }).join("");
-
-      document.getElementById("reviewSubTotal").textContent = formatFCFA(subtotal);
-      document.getElementById("reviewDiscount").textContent = formatFCFA(discount);
-      document.getElementById("reviewDelivery").textContent = formatFCFA(deliveryFee);
-      document.getElementById("reviewTotal").textContent = formatFCFA(total);
-      document.getElementById("reviewModal").classList.add("open");
-    }
-
-    function closeReview() {
-      document.getElementById("reviewModal").classList.remove("open");
-    }
-
-    function confirmWhatsApp() {
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const address = document.getElementById("address").value.trim();
-      const notes = document.getElementById("notes").value.trim();
-      const zone = document.getElementById("zone").selectedOptions[0].textContent;
-      const mode = document.getElementById("mode").value;
-      const pickup = document.getElementById("pickup").value.trim();
-      const prefs = [
-        document.getElementById("noChili").checked ? "Sans piment" : "",
-        document.getElementById("extraSauce").checked ? "Extra sauce" : "",
-        document.getElementById("noOnion").checked ? "Sans oignon" : "",
-        document.getElementById("extraSpice").checked ? "Tres pimente" : ""
-      ].filter(Boolean).join(", ");
-
-      const itemsText = Object.keys(cart).length
-        ? Object.keys(cart).map(id => {
-            const entry = cart[id];
-            const item = findItemById(entry.id);
-            return item ? `${getItemLabel(item, entry.optionIndex)} x${entry.qty}` : "";
-          }).filter(Boolean).join(", ")
-        : "Aucun article";
-
-      const subtotal = getSubtotal();
-      const discount = Math.round(subtotal * (discountPercent / 100));
-      const total = Math.max(0, subtotal - discount + deliveryFee);
-
-      const message =
-        "Bonjour, je veux commander chez Lylia Restaurant.\n" +
-        "Nom: " + (name || "Non renseigne") + "\n" +
-        "Telephone: " + (phone || "Non renseigne") + "\n" +
-        "Mode: " + mode + "\n" +
-        "Zone: " + zone + "\n" +
-        (pickup ? "Heure souhaitee: " + pickup + "\n" : "") +
-        "Adresse: " + (address || "Non renseignee") + "\n" +
-        "Commande: " + itemsText + "\n" +
-        "Sous-total: " + formatFCFA(subtotal) + "\n" +
-        "Remise: " + formatFCFA(discount) + "\n" +
-        "Livraison: " + formatFCFA(deliveryFee) + "\n" +
-        "Total: " + formatFCFA(total) + "\n" +
-        (prefs ? "Preferences: " + prefs + "\n" : "") +
-        "Notes: " + (notes || "Aucune");
-
-      saveLastOrder(message);
-      closeReview();
-      window.open("https://wa.me/221711375861?text=" + encodeURIComponent(message));
-    }
-
-    function showMenu() {
-      document.getElementById("menuSection").scrollIntoView({ behavior: "smooth" });
-    }
-
-    function scrollToInfo() {
-      document.getElementById("infoSection").scrollIntoView({ behavior: "smooth" });
-    }
-
-    function scrollToOrder() {
-      document.getElementById("orderSection").scrollIntoView({ behavior: "smooth" });
-    }
-
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    function toggleSoldOut() {
-      soldOutToday = !soldOutToday;
-      soldNotice.classList.toggle("show", soldOutToday);
-      renderMenu();
-    }
-
-    function sendReservation() {
-      const name = document.getElementById("resName").value.trim();
-      const phone = document.getElementById("resPhone").value.trim();
-      const date = document.getElementById("resDate").value;
-      const time = document.getElementById("resTime").value;
-      const people = document.getElementById("resPeople").value;
-      const message =
-        "Bonjour, je souhaite reserver une table.\n" +
-        "Nom: " + (name || "Non renseigne") + "\n" +
-        "Telephone: " + (phone || "Non renseigne") + "\n" +
-        "Date: " + (date || "Non renseignee") + "\n" +
-        "Heure: " + (time || "Non renseignee") + "\n" +
-        "Personnes: " + (people || "Non renseigne");
-      window.open("https://wa.me/221711375861?text=" + encodeURIComponent(message));
-    }
-
-    function setLanguage(lang) {
-      const dict = {
-        fr: {
-          subtitle: "Cuisine senegalaise, livraison Tiak Tiak",
-          order_btn: "Commander",
-          hero_title: "Le gout qui donne envie de revenir",
-          hero_desc: "Des recettes maison, des produits frais et une livraison rapide. Commandez en quelques clics.",
-          menu_btn: "Voir le menu",
-          menu_title: "Nos menus signature",
-          menu_chip: "Frais chaque jour",
-          cart_title: "Panier express",
-          cart_chip: "Total en direct",
-          track_title: "Suivi de commande",
-          track_chip: "Statut",
-          order_title: "Valider ma commande",
-          order_chip: "Mobile first"
-        },
-        wo: {
-          subtitle: "Lekku Senegaal, jottali Tiak Tiak",
-          order_btn: "Joxal",
-          hero_title: "Nekk ci xel",
-          hero_desc: "Joxal sa ndigal ci ndimbal bu gaaw, lekku bu saf.",
-          menu_btn: "Gis menu",
-          menu_title: "Menu bu bees",
-          menu_chip: "Frais bes bu ne",
-          cart_title: "Panier bu gaaw",
-          cart_chip: "Total ci ngay",
-          track_title: "Topp ndigal",
-          track_chip: "Statut",
-          order_title: "Doxal ndigal",
-          order_chip: "Mobile first"
-        },
-        en: {
-          subtitle: "Senegalese food, fast Tiak Tiak delivery",
-          order_btn: "Order",
-          hero_title: "A taste you will love",
-          hero_desc: "Homemade recipes, fresh ingredients, and fast delivery.",
-          menu_btn: "See menu",
-          menu_title: "Signature menus",
-          menu_chip: "Fresh every day",
-          cart_title: "Quick cart",
-          cart_chip: "Live total",
-          track_title: "Order tracking",
-          track_chip: "Status",
-          order_title: "Confirm my order",
-          order_chip: "Mobile first"
-        }
-      };
-      const map = dict[lang] || dict.fr;
-      document.querySelectorAll("[data-i18n]").forEach(el => {
-        const key = el.getAttribute("data-i18n");
-        if (map[key]) el.textContent = map[key];
-      });
-    }
-
-    function saveLastOrder(message) {
-      try {
-        localStorage.setItem("lylia_last_order", message);
-        updateLastOrder();
-      } catch (e) {
-        // storage unavailable
-      }
-    }
-
-    function updateLastOrder() {
-      try {
-        const msg = localStorage.getItem("lylia_last_order");
-        if (msg) {
-          lastOrderText.textContent = "Derniere commande enregistree. Vous pouvez recommander en 1 clic.";
+<script>
+    // Numéro du vendeur (identique à celui affiché)
+    const VENDOR_PHONE = "783068748";      // format sans indicatif international pour WhatsApp
+    const VENDOR_PHONE_FULL = "221783068748";   // indicatif Sénégal +221
+    
+    // --- Préparer le lien WhatsApp avec message pré-rempli selon le contexte (manuel ou formulaire) ---
+    function generateWhatsAppURL(customMessage = null) {
+        let message = "";
+        if (customMessage) {
+            message = customMessage;
         } else {
-          lastOrderText.textContent = "Aucune commande recente.";
+            // message pré-rempli par défaut quand on clique sur le bouton principal
+            message = "Bonjour, je suis intéressé par l'achat de votre site internet (affiché à vendre). Pouvez-vous me donner plus d'informations ? Merci !";
         }
-      } catch (e) {
-        lastOrderText.textContent = "Historique indisponible.";
-      }
+        // Encoder le message pour URL
+        const encodedMsg = encodeURIComponent(message);
+        return `https://wa.me/${VENDOR_PHONE}?text=${encodedMsg}`;
     }
-
-    function reorderLast() {
-      try {
-        const msg = localStorage.getItem("lylia_last_order");
-        if (!msg) {
-          alert("Aucune commande enregistree.");
-          return;
+    
+    // Mettre à jour le lien du bouton WhatsApp principal avec message pré-rempli standard
+    const defaultWAlink = generateWhatsAppURL();
+    const whatsappBtn = document.getElementById('whatsappLink');
+    if (whatsappBtn) {
+        whatsappBtn.href = defaultWAlink;
+        whatsappBtn.setAttribute('target', '_blank');
+    }
+    
+    // Gestionnaire du formulaire : envoi via WhatsApp avec message pré-rempli contenant les infos du client
+    const form = document.getElementById('contactForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Récupérer les champs
+            const nameInput = document.getElementById('name');
+            const phoneInput = document.getElementById('phone');
+            const messageTextarea = document.getElementById('message');
+            
+            let nameValue = nameInput ? nameInput.value.trim() : "";
+            let phoneValue = phoneInput ? phoneInput.value.trim() : "";
+            let customMsgValue = messageTextarea ? messageTextarea.value.trim() : "";
+            
+            // Validation simple: nom obligatoire
+            if (!nameValue) {
+                alert("Merci d'indiquer votre nom pour que je puisse vous répondre.");
+                nameInput.focus();
+                return;
+            }
+            
+            // Construire un message détaillé pré-rempli pour WhatsApp
+            let finalMessage = "🔔 *DEMANDE D'ACHAT SITE* 🔔\n\n";
+            finalMessage += `👤 *Nom* : ${nameValue}\n`;
+            if (phoneValue) {
+                finalMessage += `📞 *Téléphone* : ${phoneValue}\n`;
+            }
+            if (customMsgValue) {
+                finalMessage += `💬 *Message* : ${customMsgValue}\n\n`;
+            } else {
+                finalMessage += `💬 *Message* : Intéressé par le rachat du site internet (proposition à discuter).\n\n`;
+            }
+            finalMessage += `🕒 Envoyé depuis le formulaire du site à vendre. Merci de me recontacter!`;
+            
+            // Créer lien WhatsApp avec ce message pré-rempli
+            const waLinkForForm = generateWhatsAppURL(finalMessage);
+            
+            // Ouvrir WhatsApp (ou Web WhatsApp)
+            window.open(waLinkForForm, '_blank');
+            
+            // Optionnel : petite confirmation visuelle
+            alert("✓ Message préparé ! Vous allez être redirigé vers WhatsApp pour envoyer la demande directement à mon numéro. Cliquez sur 'Envoyer' dans WhatsApp.");
+            
+            // On peut réinitialiser ou pas, laisser le client
+            // Éventuellement reset formulaire mais pas obligatoire
+            // messageTextarea.value = "";
+            // nameInput.value = "";  // déconseillé pour garder copie
+        });
+    }
+    
+    // Ajouter un deuxième lien sécurisé pour le numéro de téléphone appel (déjà présent via tel: mais ajout dynamique si besoin)
+    // Personnalisation : si on veut aussi rendre le numéro cliquable dans la zone d'infos
+    const phoneNumbersElements = document.querySelectorAll('.contact-buttons .btn-call');
+    // déjà présent avec href="tel:+221783068748" parfait.
+    
+    // Pour rendre plus accessible, on peut aussi mettre un tooltip sur le numéro
+    const vendorInfoDiv = document.querySelector('.card .content hr + div');
+    if (vendorInfoDiv) {
+        // s'assurer que le numéro est bien cliquable? optionnel mais déjà bien affiché
+    }
+    
+    // Amélioration: détection automatique pour que tout lien "tel:" soit valide
+    // Rien d'autre
+    
+    // Bonus : formulaire peut aussi envoyer une demande par WhatsApp avec un message spécifique sur le bouton flottant
+    // Ajout aussi d'un comportement si l'utilisateur clique sur le numéro affiché, mais c'est déjà textuel
+    
+    // Si l'utilisateur veut un deuxième message pré-rempli personnalisable via le formulaire : OK
+    
+    // Gestion supplémentaire : sur le bouton "WhatsApp" standard, on peut aussi proposer un message alternatif
+    // mais on reste sur le message par défaut.
+    // On peut aussi générer un lien avec le message par défaut si besoin.
+    
+    // Pour plus de robustesse, on peut réinitialiser les liens en cas de hash (pas nécessaire)
+    
+    // ✅ Ajout : message pré-rempli personnalisable en fonction de la provenance
+    // Création d'un bouton supplémentaire? le formulaire fait déjà office de message avancé
+    
+    // Ajouter une petite amélioration : si le numéro est cliqué (textuel) on peut le copier?
+    // optionnel : rendre le numéro (783068748) cliquable en tel:
+    const allNumbers = document.querySelectorAll('.card');
+    const numberSpan = document.createElement('span');
+    // mais l'affichage est déjà présent, on ajoute un lien "cliquer pour appeler" discret ?
+    // rendre l'élément contenant le numéro cliquable pour faciliter appel
+    const phoneBadge = document.querySelector('.card .content hr + div div');
+    if (phoneBadge) {
+        // on crée un lien autour du numéro
+        const strongEl = phoneBadge.querySelector('strong');
+        if (strongEl && strongEl.innerText.includes('78 306 87 48')) {
+            const parentDiv = phoneBadge;
+            // On peut ajouter un petit lien call-to-action à côté sans casser le style
+            const callLink = document.createElement('a');
+            callLink.href = "tel:+221783068748";
+            callLink.style.textDecoration = "none";
+            callLink.style.marginLeft = "8px";
+            callLink.style.background = "#e2f0ec";
+            callLink.style.padding = "2px 12px";
+            callLink.style.borderRadius = "40px";
+            callLink.style.fontSize = "0.7rem";
+            callLink.style.fontWeight = "500";
+            callLink.style.color = "#0f3b3b";
+            callLink.innerHTML = "📞 Appeler maintenant";
+            parentDiv.appendChild(callLink);
         }
-        window.open("https://wa.me/221711375861?text=" + encodeURIComponent(msg));
-      } catch (e) {
-        alert("Historique indisponible.");
-      }
     }
-
-    function setupCarousel() {
-      if (!carouselTrack || !carouselDots) return;
-      const slides = carouselTrack.children.length;
-      carouselDots.innerHTML = "";
-      for (let i = 0; i < slides; i++) {
-        const btn = document.createElement("button");
-        btn.className = "dot-btn" + (i === 0 ? " active" : "");
-        btn.onclick = () => goToSlide(i);
-        carouselDots.appendChild(btn);
-      }
-      startCarousel();
+    
+    // Pour éviter tout conflit si le client clique plusieurs fois, on gère aussi le "copier" sympathique
+    // Rien d'obligatoire. Ajouter tooltip:
+    console.log("Site à vendre — interface contact opérationnelle");
+    
+    // Pour être sûr que les liens WhatsApp s'ouvrent avec le bon préfixe : l'URL utilise wa.me (version mobile/desktop friendly)
+    // Et le numéro sans le +221 dans wa.me (car wa.me/783068748 fonctionne avec indicatif du pays)
+    // Si le numéro a été saisi sans l'indicatif, il faut que WhatsApp interprète correctement +221. Dans wa.me/783068748 c'est valide si le compte est sénégalais.
+    // On précise: l'utilisateur doit avoir WhatsApp. Parfait.
+    
+    // En bonus: rendre le message plus précis pour le bouton principal
+    const customPreFilledMsg = "Bonjour, je suis intéressé par l'achat de votre site (affiché à vendre). Je souhaite connaître le prix et les modalités de transfert. Merci !";
+    const mainWALink = `https://wa.me/${VENDOR_PHONE}?text=${encodeURIComponent(customPreFilledMsg)}`;
+    if (whatsappBtn) {
+        whatsappBtn.href = mainWALink;
     }
-
-    function goToSlide(index) {
-      const slides = carouselTrack.children.length;
-      carouselIndex = (index + slides) % slides;
-      carouselTrack.style.transform = "translateX(-" + (carouselIndex * 100) + "%)";
-      [...carouselDots.children].forEach((dot, i) => {
-        dot.classList.toggle("active", i === carouselIndex);
-      });
+    
+    // si le formulaire a un champ vide pour le message, on peut aussi offrir une pré-remplissage optionnel.
+    const msgTextarea = document.getElementById('message');
+    if (msgTextarea && msgTextarea.value === "") {
+        // on peut mettre un placeholder amélioré mais pas de valeur par défaut pour ne pas gêner
+        msgTextarea.placeholder = "Ex: Bonjour, je suis très intéressé par le site. Quel est votre prix ?";
     }
-
-    function startCarousel() {
-      if (carouselTimer) clearInterval(carouselTimer);
-      carouselTimer = setInterval(() => {
-        goToSlide(carouselIndex + 1);
-      }, 3500);
+    
+    // rendre le nom obligatoire avec style
+    const nameField = document.getElementById('name');
+    if (nameField) {
+        nameField.setAttribute('required', 'required');
     }
-
-    if (isEvening) {
-      const tabSemaine = document.getElementById("tabSemaine");
-      if (tabSemaine) tabSemaine.style.display = "none";
+    
+    // Petite sécurité : redirection si quelqu'un tente de soumettre sans nom.
+    // déja fait
+    
+    // Ajouter un message d'explication pour WhatsApp pré-rempli dans le formulaire
+    const submitBtn = document.querySelector('.btn-submit');
+    if (submitBtn) {
+        submitBtn.addEventListener('click', function(e) {
+            // double sécurité : on laisse le submit faire son travail, mais on évite des actions multiples
+            // c'est déjà géré par le submit event
+        });
     }
-
-    updateMode();
-    setTab(currentTab);
-    renderCart();
-    updateDeliveryFee();
-    updateLastOrder();
-    setupCarousel();
-    setLanguage(document.getElementById("langSelect").value);
-
-    setTimeout(() => {
-      showWelcome();
-    }, 4400);
-  </script>
-  <script>
-    // Remplace la page par un écran "Site à vendre" en réutilisant vos contacts
-    document.addEventListener('DOMContentLoaded', function () {
-      try {
-        const contactEls = document.querySelectorAll('.teranga-signature .teranga-contact .teranga-link');
-        const contacts = Array.from(contactEls).map(a => ({ href: a.href, text: a.textContent.trim(), cls: a.className }));
-        const contactButtons = contacts.map(c => {
-          const cls = c.cls.split(' ').filter(Boolean).join(' ');
-          return `<a class="contact-btn ${cls}" href="${c.href}" target="_blank" rel="noopener">${c.text}</a>`;
-        }).join('');
-
-        const saleHTML = `<!DOCTYPE html>
-<html lang="fr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Site à vendre</title>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <style>
-    :root{--accent:#f7a531}
-    body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#071028;color:#fff;font-family:Arial,Helvetica,sans-serif;padding:24px}
-    .sale-card{max-width:900px;text-align:center}
-    h1{font-size:2.2rem;margin:0 0 12px}
-    p.lead{color:#d1d5db;margin:0 0 18px}
-    .contacts{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:18px}
-    .contact-btn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:10px;color:#fff;text-decoration:none;font-weight:700}
-    .contact-btn.wa{background:#25D366}
-    .contact-btn.gh{background:#333;border:2px solid var(--accent)}
-    .contact-btn.tk{background:#000;border:2px solid #ff0050}
-    .contact-btn.em{background:#EA4335}
-  </style>
-</head>
-<body>
-  <div class="sale-card">
-    <h1>Site à vendre</h1>
-    <p class="lead">Ce site est à vendre. Pour toute proposition ou information, contactez:</p>
-    <div class="contacts">${contactButtons || '<span>Aucun contact trouvé</span>'}</div>
-  </div>
-</body>
-</html>`;
-
-        document.open();
-        document.write(saleHTML);
-        document.close();
-      } catch (e) {
-        console.error(e);
-      }
-    });
-  </script>
+    
+    // améliore l'expérience mobile
+    if ('ontouchstart' in window) {
+        document.body.style.cursor = 'pointer';
+    }
+    
+    // afficher une petite info dans la console sympa
+    console.log("✔️ Site configuré avec : WhatsApp message pré-rempli + appel + formulaire envoyant vers WhatsApp");
+</script>
 </body>
 </html>
